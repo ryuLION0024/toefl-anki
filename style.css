@@ -135,3 +135,31 @@ select { font-size: 16px; padding: 6px 8px; border-radius: 8px; border: 1px soli
 .hist { width: 100%; border-collapse: collapse; font-size: 13px; }
 .hist td { padding: 6px 4px; border-top: 1px solid var(--line); }
 .hist td:last-child { text-align: right; }
+
+/* 書く・話す */
+.tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px; background: var(--hint-soft); color: var(--hint); vertical-align: middle; margin-left: 4px; }
+h3.sub { font-size: 13px; color: var(--accent); margin: 14px 0 2px; }
+.linkbtn { border: 0; background: none; color: var(--accent); font-size: 14px; padding: 0; cursor: pointer; }
+.tpl { font-family: Georgia, "Times New Roman", serif; font-size: 17px; line-height: 2.1; }
+.tpl .ph, .ph { color: var(--muted); font-style: italic; }
+.w-ok { color: var(--ok); background: var(--ok-soft); border-radius: 4px; padding: 0 2px; }
+.w-ng { color: var(--ng); background: var(--ng-soft); border-radius: 4px; padding: 0 2px; }
+.typed { text-decoration: line-through; opacity: .7; font-family: var(--mono); font-size: 13px; margin-left: 4px; }
+textarea.recall { min-height: 160px; font-family: Georgia, serif; font-size: 16px; background: var(--surface); }
+textarea.recall[rows="2"] { min-height: 64px; }
+.bubble { background: var(--accent-soft); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 16px; }
+.sentence { font-size: 17px; line-height: 2.4; }
+.slot { min-width: 3.2em; border: 0; border-bottom: 2px solid var(--muted); background: none; padding: 2px 6px; font-size: 16px; cursor: pointer; }
+.slot.on { border-bottom-color: var(--accent); color: var(--accent); background: var(--accent-soft); border-radius: 6px 6px 0 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.chip-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 12px; font-size: 16px; cursor: pointer; }
+.chip-btn:disabled { opacity: .25; }
+.center { text-align: center; }
+.center .btn { margin-left: auto; margin-right: auto; }
+.bigtimer { font-family: var(--mono); font-size: 44px; font-weight: 700; margin: 10px 0; color: var(--accent); }
+.bigtimer.over { color: var(--ng); }
+audio { width: 100%; margin-top: 12px; }
+label.check { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+label.check:first-of-type { border-top: 0; }
+p.pre { white-space: pre-wrap; margin: 0; font-size: 15px; }
+.tabs button { font-size: 13px; }

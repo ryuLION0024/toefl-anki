@@ -20,6 +20,18 @@ node tools/serve.mjs
 
 http://localhost:8640 を開く。
 
+## 書く・話す（Writing / Speaking）
+
+テンプレート・模範解答の段階的暗記、Build a Sentence、Listen and Repeat（録音・書き取り）、Take an Interview（45秒・録音）。公開版の問題と模範解答はすべてオリジナル。
+
+TST Prep の PDF の原文（テンプレート・模範解答・例題・チェックリスト）を使うには、Mac で個人用データを作る:
+
+```bash
+python3 tools/build_private_pack.py ~/Desktop/12.英語勉強/TSTprep
+```
+
+できた `private/tstprep-pack.json`（git 管理外）を、各端末の「記録・設定 → TST Prep 個人用データ → ファイルを選ぶ」で読み込む。iPhone へは AirDrop で送り「ファイル」アプリに保存してから選ぶ。データは端末内にだけ保存され、ネットには出ない。
+
 ## 端末間の進捗移行
 
 進捗は端末ごとに保存される。「記録・設定」→「進捗をコピー」→ もう一方の端末の「読み込む」に貼り付け。

@@ -1,3 +1,4 @@
+import { initPractice, renderPractice, packSummary, savePack, clearPack } from "./practice.js";
 // TOEFL暗記 — Complete the Words 形式 + 間隔反復（Leitner 方式）
 const STORE_KEY = "toefl-anki-v1";
 const INTERVALS = [0, 1, 3, 7, 16, 35]; // box ごとの次回までの日数。box 5 = 習得
@@ -118,7 +119,7 @@ function setTab(t) {
   document.querySelectorAll(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === t));
   clearInterval(timerId);
   session = null;
-  ({ home: renderHome, words: renderWords, settings: renderSettings })[t]();
+  ({ home: renderHome, practice: renderPractice, words: renderWords, settings: renderSettings })[t]();
   window.scrollTo(0, 0);
 }
 
@@ -380,6 +381,12 @@ function renderSettings() {
       <p id="msg" class="small" role="status"></p>
     </section>
     <section class="panel">
+      <h2>TST Prep 個人用データ</h2>
+      <p class="muted small" style="margin-top:0">${packSummary() != null ? `読み込み済み（${packSummary()}項目）。書く・話すタブに TST マーク付きで表示されます。` : "未読み込み。Mac で作った tstprep-pack.json を選ぶと、PDF のテンプレート・模範解答・例題がこの端末に保存されます（ネットには送信されません）。"}</p>
+      <div class="row"><label class="btn sub" style="text-align:center">ファイルを選ぶ<input type="file" id="packfile" accept=".json,application/json" hidden></label>${packSummary() != null ? `<button class="btn sub" id="packdel">削除</button>` : ""}</div>
+      <p id="packmsg" class="small" role="status"></p>
+    </section>
+    <section class="panel">
       <h2>リセット</h2>
       <button class="btn sub" id="reset" style="color:var(--ng)">学習記録をすべて消す</button>
     </section>
@@ -406,6 +413,16 @@ function renderSettings() {
   };
   $("#load").onclick = () => importText($("#imp").value);
   $("#file").onchange = async (e) => { const f = e.target.files[0]; if (f) importText(await f.text()); };
+  $("#packfile").onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const p = JSON.parse(await f.text());
+      if (p.app !== "toefl-anki-pack") throw new Error();
+      $("#packmsg").textContent = savePack(p) ? "読み込みました" : "保存できませんでした（プライベートモードでは保存できません）";
+      setTimeout(() => setTab("settings"), 600);
+    } catch { $("#packmsg").textContent = "tstprep-pack.json ではないようです"; }
+  };
+  if ($("#packdel")) $("#packdel").onclick = () => { if (confirm("この端末の TST Prep データを削除します。よろしいですか？")) { clearPack(); setTab("settings"); } };
   $("#reset").onclick = () => {
     if (!confirm("学習記録をすべて消します。元に戻せません。よろしいですか？")) return;
     state = blankState(); save(); setTab("home");
@@ -423,6 +440,7 @@ async function init() {
     PASSAGES = parts.flatMap(([, p]) => p);
     PASSAGES.forEach((p) => { p.heads = tokens(p.text).filter((x) => x.head).map((x) => x.head); });
     WMAP = Object.fromEntries(WORDS.map((x) => [x.w, x]));
+    await initPractice({ view, getState: () => state, save, speak });
   } catch {
     view().innerHTML = `<p class="panel">データを読み込めませんでした。一度オンラインで開いてください。</p>`;
     return;
