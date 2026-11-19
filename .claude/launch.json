@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "toefl-anki-dev",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": [
+        "tools/serve.mjs",
+        "8640"
+      ],
+      "port": 8640
+    }
+  ]
+}
