@@ -1,0 +1,1184 @@
+[
+{
+"w": "fluctuate",
+"pos": "v.",
+"ja": "変動する・上下する",
+"forms": [
+"fluctuation"
+],
+"ety": {
+"parts": [
+{
+"p": "fluct（flu）",
+"m": "流れる・波打つ",
+"list": true
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "波のように揺れ動く → 変動する"
+}
+},
+{
+"w": "focus",
+"pos": "n./v.",
+"ja": "焦点；集中する・焦点を合わせる",
+"forms": [
+"focal"
+],
+"ety": {
+"parts": [
+{
+"p": "focus",
+"m": "炉・かまど（ラテン語）"
+}
+],
+"note": "家の中心にある炉 → 中心点 → 焦点。focus on 〜"
+}
+},
+{
+"w": "format",
+"pos": "n./v.",
+"ja": "形式・体裁；書式を整える",
+"forms": [
+"formatted"
+],
+"ety": {
+"parts": [
+{
+"p": "form",
+"m": "形",
+"list": true
+},
+{
+"p": "-at",
+"m": "〜された（ラテン語 formatus）"
+}
+],
+"note": "形づくられたもの → 形式"
+}
+},
+{
+"w": "forthcoming",
+"pos": "adj.",
+"ja": "近く来る・近刊の；（情報などが）すぐ得られる",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "forth",
+"m": "前へ"
+},
+{
+"p": "coming",
+"m": "来ること"
+}
+],
+"note": "前へ出てくる → 間もなく現れる・近刊の"
+}
+},
+{
+"w": "foundation",
+"pos": "n.",
+"ja": "基礎・土台；財団；創設",
+"forms": [
+"foundational"
+],
+"ety": {
+"parts": [
+{
+"p": "found",
+"m": "底・土台（ラテン語 fundus）"
+},
+{
+"p": "-ation",
+"m": "行為・結果",
+"list": true
+}
+],
+"note": "土台を据えること → 基礎・創設"
+}
+},
+{
+"w": "found",
+"pos": "v.",
+"ja": "設立する・創設する",
+"forms": [
+"founder",
+"founding"
+],
+"ety": {
+"parts": [
+{
+"p": "found",
+"m": "底・土台（ラテン語 fundus）"
+}
+],
+"note": "土台を据える → 設立する。find の過去形 found とは別の語（found-founded-founded）"
+}
+},
+{
+"w": "framework",
+"pos": "n.",
+"ja": "枠組み・体制",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "frame",
+"m": "枠"
+},
+{
+"p": "work",
+"m": "作られたもの"
+}
+],
+"note": "枠となる構造 → 考え方や制度の枠組み"
+}
+},
+{
+"w": "fund",
+"pos": "n./v.",
+"ja": "資金・基金；資金を出す",
+"forms": [
+"funding",
+"fundraising"
+],
+"ety": {
+"parts": [
+{
+"p": "fund",
+"m": "底・土台（ラテン語 fundus）"
+}
+],
+"note": "蓄えの底 → 資金。funding（資金提供）が頻出"
+}
+},
+{
+"w": "fundamental",
+"pos": "adj./n.",
+"ja": "根本的な・基本的な；基本原則",
+"forms": [
+"fundamentally",
+"fundamentalism"
+],
+"ety": {
+"parts": [
+{
+"p": "fundament",
+"m": "土台（fundus 底）"
+},
+{
+"p": "-al",
+"m": "〜に関する",
+"list": true
+}
+],
+"note": "土台に関する → 根本的な"
+}
+},
+{
+"w": "gender",
+"pos": "n.",
+"ja": "（社会的・文化的な）性；（文法の）性",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "gen",
+"m": "生む・種類",
+"list": true
+},
+{
+"p": "-der",
+"m": "（ラテン語 genus 種類）"
+}
+],
+"note": "種類 → 性別の区分。gender roles（性役割）"
+}
+},
+{
+"w": "generate",
+"pos": "v.",
+"ja": "生み出す・発生させる",
+"forms": [
+"generation",
+"generator"
+],
+"ety": {
+"parts": [
+{
+"p": "gener（gen）",
+"m": "生む・種族",
+"list": true
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "生み出す → 発生させる。generate electricity / revenue"
+}
+},
+{
+"w": "generation",
+"pos": "n.",
+"ja": "世代；発生・生成",
+"forms": [
+"generational"
+],
+"ety": {
+"parts": [
+{
+"p": "gen",
+"m": "生む",
+"list": true
+},
+{
+"p": "-ation（-tion）",
+"m": "行為・結果",
+"list": true
+}
+],
+"note": "生み出されたひとまとまり → 世代。電気の生成 → power generation"
+}
+},
+{
+"w": "globe",
+"pos": "n.",
+"ja": "地球・世界；球体",
+"forms": [
+"global",
+"globally",
+"globalization"
+],
+"ety": {
+"parts": [
+{
+"p": "glob",
+"m": "球・かたまり（ラテン語 globus）"
+}
+],
+"note": "球 → 地球。global（地球規模の）"
+}
+},
+{
+"w": "goal",
+"pos": "n.",
+"ja": "目標；ゴール",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "goal",
+"m": "境界・限界（中英語 gol）"
+}
+],
+"note": "競走の終点の境界 → 目標"
+}
+},
+{
+"w": "grade",
+"pos": "n./v.",
+"ja": "成績・等級；学年；採点する・等級をつける",
+"forms": [
+"gradual",
+"gradually",
+"gradient"
+],
+"ety": {
+"parts": [
+{
+"p": "grad",
+"m": "段階・歩み",
+"list": true
+}
+],
+"note": "一歩一歩の段階 → 等級・学年。gradual（段階的な）"
+}
+},
+{
+"w": "grant",
+"pos": "v./n.",
+"ja": "与える・認める；助成金",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "grant",
+"m": "信頼して与える（ラテン語 credere 信じる）"
+}
+],
+"note": "信用して与える → 認める・授ける。take for granted（当然と思う）"
+}
+},
+{
+"w": "guarantee",
+"pos": "v./n.",
+"ja": "保証する；保証",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "guar（ward）",
+"m": "守る"
+},
+{
+"p": "-antee（-ee）",
+"m": "〜される者・もの",
+"list": true
+}
+],
+"note": "守ってくれるもの → 保証"
+}
+},
+{
+"w": "guideline",
+"pos": "n.",
+"ja": "指針・ガイドライン",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "guide",
+"m": "導く"
+},
+{
+"p": "line",
+"m": "線"
+}
+],
+"note": "導くための線 → 指針"
+}
+},
+{
+"w": "hence",
+"pos": "adv.",
+"ja": "それゆえに；今から（〜後）",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "hen",
+"m": "ここから（古英語 heonan）"
+},
+{
+"p": "-ce",
+"m": "（副詞語尾）"
+}
+],
+"note": "ここから → ここから導かれて → それゆえ。three years hence（今から3年後）"
+}
+},
+{
+"w": "hierarchy",
+"pos": "n.",
+"ja": "階層（制）・序列",
+"forms": [
+"hierarchical"
+],
+"ety": {
+"parts": [
+{
+"p": "hier",
+"m": "聖なる（ギリシャ語 hieros）"
+},
+{
+"p": "archy（arch）",
+"m": "支配",
+"list": true
+}
+],
+"note": "聖職者による支配 → 位階制度 → 階層"
+}
+},
+{
+"w": "highlight",
+"pos": "v./n.",
+"ja": "強調する・目立たせる；見どころ",
+"forms": [
+"highlighter"
+],
+"ety": {
+"parts": [
+{
+"p": "high",
+"m": "高い"
+},
+{
+"p": "light",
+"m": "光"
+}
+],
+"note": "最も光が当たる部分 → 強調する"
+}
+},
+{
+"w": "hypothesis",
+"pos": "n.",
+"ja": "仮説",
+"forms": [
+"hypotheses",
+"hypothesize",
+"hypothetical"
+],
+"ety": {
+"parts": [
+{
+"p": "hypo",
+"m": "下に（ギリシャ語）"
+},
+{
+"p": "thesis",
+"m": "置くこと・主張"
+}
+],
+"note": "議論の下に置くもの → 前提 → 仮説。複数形 hypotheses"
+}
+},
+{
+"w": "identical",
+"pos": "adj.",
+"ja": "同一の・まったく同じ",
+"forms": [
+"identically"
+],
+"ety": {
+"parts": [
+{
+"p": "ident",
+"m": "同じ（ラテン語 idem）"
+},
+{
+"p": "-ical",
+"m": "〜に関する",
+"list": true
+}
+],
+"note": "まったく同じ → identical twins（一卵性双生児）"
+}
+},
+{
+"w": "ideology",
+"pos": "n.",
+"ja": "イデオロギー・観念体系",
+"forms": [
+"ideological",
+"ideologically"
+],
+"ety": {
+"parts": [
+{
+"p": "ideo",
+"m": "考え（idea）"
+},
+{
+"p": "logy（log）",
+"m": "学・論",
+"list": true
+}
+],
+"note": "考えの体系 → イデオロギー"
+}
+},
+{
+"w": "ignorance",
+"pos": "n.",
+"ja": "無知・知らないこと",
+"forms": [
+"ignorant",
+"ignore"
+],
+"ety": {
+"parts": [
+{
+"p": "i（in）",
+"m": "〜でない",
+"list": true
+},
+{
+"p": "gnor（cogn）",
+"m": "知る",
+"list": true
+},
+{
+"p": "-ance",
+"m": "状態",
+"list": true
+}
+],
+"note": "知らない状態 → 無知。動詞 ignore（無視する）"
+}
+},
+{
+"w": "illustrate",
+"pos": "v.",
+"ja": "（例で）説明する・示す；挿絵を入れる",
+"forms": [
+"illustration",
+"illustrative"
+],
+"ety": {
+"parts": [
+{
+"p": "il（in）",
+"m": "中に",
+"list": true
+},
+{
+"p": "lustr（luc/lus）",
+"m": "光・照らす",
+"list": true
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "光を当てて明らかにする → 例で説明する"
+}
+},
+{
+"w": "image",
+"pos": "n.",
+"ja": "像・画像；イメージ",
+"forms": [
+"imagery",
+"imagine"
+],
+"ety": {
+"parts": [
+{
+"p": "imag",
+"m": "似姿・写し（ラテン語 imago）"
+}
+],
+"note": "写し取った姿 → 像・画像"
+}
+},
+{
+"w": "immigrate",
+"pos": "v.",
+"ja": "（外国から）移住する",
+"forms": [
+"immigration",
+"immigrant"
+],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "中へ",
+"list": true
+},
+{
+"p": "migr",
+"m": "移動する",
+"list": true
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "中へ移り住む → 移住してくる。emigrate は「外へ移住する」"
+}
+},
+{
+"w": "impact",
+"pos": "n./v.",
+"ja": "影響・衝撃；影響を与える",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "中へ",
+"list": true
+},
+{
+"p": "pact",
+"m": "打ち込む（ラテン語 pangere）"
+}
+],
+"note": "打ち込むこと → 衝撃 → 影響。have an impact on 〜"
+}
+},
+{
+"w": "implement",
+"pos": "v./n.",
+"ja": "実行する・実施する；道具",
+"forms": [
+"implementation"
+],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "中に",
+"list": true
+},
+{
+"p": "ple",
+"m": "満たす"
+},
+{
+"p": "-ment",
+"m": "手段",
+"list": true
+}
+],
+"note": "中を満たして完成させる → 実行する"
+}
+},
+{
+"w": "implicit",
+"pos": "adj.",
+"ja": "暗黙の・暗に含まれた",
+"forms": [
+"implicitly"
+],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "中に",
+"list": true
+},
+{
+"p": "plic（pli）",
+"m": "折る",
+"list": true
+},
+{
+"p": "-it",
+"m": "〜された"
+}
+],
+"note": "中に折り込まれた → 暗黙の。反対は explicit"
+}
+},
+{
+"w": "imply",
+"pos": "v.",
+"ja": "暗に意味する・示唆する",
+"forms": [
+"implication"
+],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "中に",
+"list": true
+},
+{
+"p": "ply（pli）",
+"m": "折る",
+"list": true
+}
+],
+"note": "中に折り込む → 含意する。名詞 implication（含意・影響）"
+}
+},
+{
+"w": "impose",
+"pos": "v.",
+"ja": "課す・押しつける",
+"forms": [
+"imposition"
+],
+"ety": {
+"parts": [
+{
+"p": "im（in）",
+"m": "上に",
+"list": true
+},
+{
+"p": "pose（pos）",
+"m": "置く",
+"list": true
+}
+],
+"note": "上に置く → 課す。impose a tax on 〜"
+}
+},
+{
+"w": "incentive",
+"pos": "n.",
+"ja": "誘因・動機づけ・奨励金",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "〜に向けて",
+"list": true
+},
+{
+"p": "cent",
+"m": "歌う（ラテン語 canere）"
+},
+{
+"p": "-ive",
+"m": "〜の性質",
+"list": true
+}
+],
+"note": "歌って気持ちを駆り立てるもの → 動機づけ"
+}
+},
+{
+"w": "incidence",
+"pos": "n.",
+"ja": "発生率・発生",
+"forms": [
+"incident",
+"incidental",
+"incidentally"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "上に",
+"list": true
+},
+{
+"p": "cid（cad）",
+"m": "落ちる",
+"list": true
+},
+{
+"p": "-ence",
+"m": "状態",
+"list": true
+}
+],
+"note": "上に降りかかること → 出来事の発生（率）"
+}
+},
+{
+"w": "income",
+"pos": "n.",
+"ja": "収入・所得",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "come",
+"m": "来る"
+}
+],
+"note": "中に入ってくるもの → 収入"
+}
+},
+{
+"w": "incorporate",
+"pos": "v.",
+"ja": "組み込む・取り入れる；法人化する",
+"forms": [
+"incorporation"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中に",
+"list": true
+},
+{
+"p": "corpor（corp）",
+"m": "体",
+"list": true
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "一つの体の中に入れる → 組み込む"
+}
+},
+{
+"w": "index",
+"pos": "n./v.",
+"ja": "指標・指数；索引",
+"forms": [
+"indices"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "〜に向けて",
+"list": true
+},
+{
+"p": "dex（dic/dict）",
+"m": "示す",
+"list": true
+}
+],
+"note": "指し示すもの → 指標・索引。index finger（人差し指）"
+}
+},
+{
+"w": "induce",
+"pos": "v.",
+"ja": "引き起こす；説得して〜させる",
+"forms": [
+"induction",
+"inducement"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "duce（duc）",
+"m": "導く",
+"list": true
+}
+],
+"note": "中へ導き入れる → 誘発する"
+}
+},
+{
+"w": "inevitable",
+"pos": "adj.",
+"ja": "避けられない",
+"forms": [
+"inevitably",
+"inevitability"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "〜でない",
+"list": true
+},
+{
+"p": "evit",
+"m": "避ける（ラテン語 evitare）"
+},
+{
+"p": "-able",
+"m": "〜できる",
+"list": true
+}
+],
+"note": "避けることができない → 必然的な"
+}
+},
+{
+"w": "infer",
+"pos": "v.",
+"ja": "推論する・推測する",
+"forms": [
+"inference"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "fer",
+"m": "運ぶ",
+"list": true
+}
+],
+"note": "結論を頭の中へ運び込む → 推論する。TOEFL の inference 問題"
+}
+},
+{
+"w": "infrastructure",
+"pos": "n.",
+"ja": "社会基盤・インフラ",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "infra",
+"m": "下に"
+},
+{
+"p": "struct（stru）",
+"m": "建てる",
+"list": true
+},
+{
+"p": "-ure",
+"m": "結果",
+"list": true
+}
+],
+"note": "下で支える構造 → 社会基盤（道路・電力など）"
+}
+},
+{
+"w": "inherent",
+"pos": "adj.",
+"ja": "固有の・本来備わっている",
+"forms": [
+"inherently"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中に",
+"list": true
+},
+{
+"p": "her",
+"m": "くっつく（ラテン語 haerere）"
+},
+{
+"p": "-ent",
+"m": "〜の性質を持つ",
+"list": true
+}
+],
+"note": "中にくっついている → 本来備わった"
+}
+},
+{
+"w": "inhibit",
+"pos": "v.",
+"ja": "抑制する・妨げる",
+"forms": [
+"inhibition",
+"inhibitor"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中に",
+"list": true
+},
+{
+"p": "hibit",
+"m": "持つ・保つ"
+}
+],
+"note": "中に抑えて保つ → 抑制する"
+}
+},
+{
+"w": "initial",
+"pos": "adj./n.",
+"ja": "最初の；頭文字",
+"forms": [
+"initially"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "it",
+"m": "行く"
+},
+{
+"p": "-ial",
+"m": "〜に関する",
+"list": true
+}
+],
+"note": "中へ入っていく始まり → 最初の。initially（初めは）"
+}
+},
+{
+"w": "initiate",
+"pos": "v.",
+"ja": "始める・開始する",
+"forms": [
+"initiative",
+"initiation"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "it",
+"m": "行く"
+},
+{
+"p": "-iate（-ate）",
+"m": "〜する",
+"list": true
+}
+],
+"note": "中へ入らせる → 始める。initiative（主導権・新たな取り組み）"
+}
+},
+{
+"w": "injure",
+"pos": "v.",
+"ja": "傷つける・けがをさせる",
+"forms": [
+"injury",
+"injured"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "〜でない",
+"list": true
+},
+{
+"p": "jur",
+"m": "法・正義（ラテン語 jus）"
+}
+],
+"note": "不正（法に反すること）をする → 害する・傷つける"
+}
+},
+{
+"w": "innovate",
+"pos": "v.",
+"ja": "革新する・新しく取り入れる",
+"forms": [
+"innovation",
+"innovative",
+"innovator"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中に",
+"list": true
+},
+{
+"p": "nov",
+"m": "新しい"
+},
+{
+"p": "-ate",
+"m": "〜する",
+"list": true
+}
+],
+"note": "新しいものを取り入れる → 革新する。novel（斬新な）も nov"
+}
+},
+{
+"w": "input",
+"pos": "n./v.",
+"ja": "入力・投入；意見；入力する",
+"forms": [],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "put",
+"m": "置く"
+}
+],
+"note": "中へ入れるもの → 入力・意見。反対は output"
+}
+},
+{
+"w": "insert",
+"pos": "v.",
+"ja": "挿入する",
+"forms": [
+"insertion"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中へ",
+"list": true
+},
+{
+"p": "sert",
+"m": "並べる・結ぶ（ラテン語 serere）"
+}
+],
+"note": "中へ差し入れる → 挿入する。TOEFL の Insert Text 問題"
+}
+},
+{
+"w": "insight",
+"pos": "n.",
+"ja": "洞察・見識",
+"forms": [
+"insightful"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中を",
+"list": true
+},
+{
+"p": "sight",
+"m": "見ること"
+}
+],
+"note": "内側を見抜くこと → 洞察"
+}
+},
+{
+"w": "inspect",
+"pos": "v.",
+"ja": "検査する・視察する",
+"forms": [
+"inspection",
+"inspector"
+],
+"ety": {
+"parts": [
+{
+"p": "in",
+"m": "中を",
+"list": true
+},
+{
+"p": "spect",
+"m": "見る",
+"list": true
+}
+],
+"note": "中をよく見る → 検査する"
+}
+}
+]
