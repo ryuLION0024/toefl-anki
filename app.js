@@ -40,7 +40,7 @@ function tokens(text) {
   if (last < text.length) out.push({ t: text.slice(last) });
   return out;
 }
-const headsOf = (p) => tokens(p.text).filter((x) => x.head).map((x) => x.head);
+const headsOf = (p) => p.heads;
 const splitWord = (s) => { const k = Math.max(1, Math.floor(s.length / 2)); return [s.slice(0, k), s.slice(k)]; };
 
 // ---------- 出題の組み立て ----------
@@ -383,7 +383,7 @@ function renderSettings() {
       <h2>リセット</h2>
       <button class="btn sub" id="reset" style="color:var(--ng)">学習記録をすべて消す</button>
     </section>
-    <p class="muted small">収録 ${WORDS.length}語 / ${PASSAGES.length}段落（試作版）。素材: TST Prep Academic Vocabulary List・Essential Word Parts List（個人学習用）。</p>`;
+    <p class="muted small">収録 ${WORDS.length}語 / ${PASSAGES.length}段落。素材: TST Prep Academic Vocabulary List・Essential Word Parts List（個人学習用）。</p>`;
   const msg = (t) => { $("#msg").textContent = t; };
   $("#npd").onchange = (e) => { state.settings.newPerDay = +e.target.value; save(); };
   const dump = () => JSON.stringify({ app: "toefl-anki", v: 1, at: Date.now(), state });
@@ -416,8 +416,13 @@ function renderSettings() {
 async function init() {
   load();
   try {
-    const [w, p] = await Promise.all([fetch("data/words.json").then((r) => r.json()), fetch("data/passages.json").then((r) => r.json())]);
-    WORDS = w; PASSAGES = p; WMAP = Object.fromEntries(w.map((x) => [x.w, x]));
+    const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return r.json(); });
+    const { batches } = await get("data/index.json");
+    const parts = await Promise.all(batches.map((b) => Promise.all([get(`data/words/${b}.json`), get(`data/passages/${b}.json`)])));
+    WORDS = parts.flatMap(([w]) => w);
+    PASSAGES = parts.flatMap(([, p]) => p);
+    PASSAGES.forEach((p) => { p.heads = tokens(p.text).filter((x) => x.head).map((x) => x.head); });
+    WMAP = Object.fromEntries(WORDS.map((x) => [x.w, x]));
   } catch {
     view().innerHTML = `<p class="panel">データを読み込めませんでした。一度オンラインで開いてください。</p>`;
     return;

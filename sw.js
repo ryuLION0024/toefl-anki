@@ -1,14 +1,21 @@
-// データやアセットを変えたら必ず上げる（iPhone 側のキャッシュ更新のため）
-const CACHE_VERSION = "v1";
+// コードやデータを変えたら上げる（古いキャッシュを確実に消すため）
+const CACHE_VERSION = "v2";
 const CACHE = `toefl-anki-${CACHE_VERSION}`;
-const ASSETS = [
-  "./", "index.html", "style.css", "app.js", "manifest.webmanifest",
-  "data/words.json", "data/passages.json",
+const CORE = [
+  "./", "index.html", "style.css", "app.js", "manifest.webmanifest", "data/index.json",
   "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
 ];
 
+// 本体に加え、data/index.json に載っている全バッチを先にキャッシュする
+async function precache() {
+  const c = await caches.open(CACHE);
+  await c.addAll(CORE);
+  const { batches } = await (await c.match("data/index.json")).json();
+  await c.addAll(batches.flatMap((b) => [`data/words/${b}.json`, `data/passages/${b}.json`]));
+}
+
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(precache().then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {
