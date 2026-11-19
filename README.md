@@ -1,6 +1,6 @@
 # TOEFL暗記
 
-AWL 570語を TOEFL Reading「Complete the Words」形式で覚えるオフライン対応の暗記アプリ（PWA）。
+AWL 全564語（212段落）を TOEFL Reading「Complete the Words」形式で覚えるオフライン対応の暗記アプリ（PWA）。
 
 公開URL: https://ryulion0024.github.io/toefl-anki/
 
