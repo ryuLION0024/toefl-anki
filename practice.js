@@ -351,7 +351,7 @@ function startRepeat(id) {
   const show = () => {
     const s = set.sentences[run.i];
     ctx.view().innerHTML = `${backBar(`${set.title} ${run.i + 1} / ${set.sentences.length}`)}
-      ${run.i === 0 ? `<p class="direction">${esc(set.context)}</p>` : ""}
+      ${run.i === 0 ? `<p class="direction">${esc(set.context)}</p>${set.contextJa ? `<p class="muted small">${esc(set.contextJa)}</p>` : ""}` : ""}
       <section class="panel center">
         <button class="btn" id="play">▶ 聞く</button>
         <p class="muted small" id="plays">本番は1回だけ。聞いたらすぐ声に出して繰り返します。</p>
@@ -382,7 +382,7 @@ function startRepeat(id) {
         run.scores.push(pct);
         html = words.map((w, k) => `<span class="${hit.has(k) ? "w-ok" : "w-ng"}">${esc(w)}</span>`).join(" ");
       }
-      $(".toolbar").outerHTML = `<section class="panel" style="margin-top:14px"><p class="ex" style="margin:0">${html}</p>${pct != null ? `<p class="muted small">書き取り ${pct}%（赤＝抜けた・違った語）</p>` : ""}</section>
+      $(".toolbar").outerHTML = `<section class="panel" style="margin-top:14px"><p class="ex" style="margin:0">${html}</p>${set.sentencesJa?.[run.i] ? `<p class="ja" style="margin:6px 0 0">${esc(set.sentencesJa[run.i])}</p>` : ""}${pct != null ? `<p class="muted small">書き取り ${pct}%（赤＝抜けた・違った語）</p>` : ""}</section>
         <div class="toolbar"><button class="btn sub" id="again">もう一度聞く</button><button class="btn" id="next">${run.i + 1 < set.sentences.length ? "次の文へ" : "振り返りへ"}</button></div>`;
       $("#again").onclick = () => ctx.speak(s);
       $("#next").onclick = () => { run.i++; if (run.i < set.sentences.length) show(); else summary(); };
@@ -415,7 +415,7 @@ function startInterview(id) {
   const show = () => {
     clearTimer();
     if (run.i < 0) {
-      ctx.view().innerHTML = `${backBar(set.topic)}<section class="panel"><p style="margin:0">${esc(set.intro)}</p></section>
+      ctx.view().innerHTML = `${backBar(set.topic)}<section class="panel"><p style="margin:0">${esc(set.intro)}</p>${set.introJa ? `<p class="ja">${esc(set.introJa)}</p>` : ""}</section>
         <p class="muted small">質問は4つ。各質問のあと準備時間なしで45秒話します。質問文は聞くまで隠れています。</p>
         <button class="btn" id="go">始める</button>`;
       bindBack(); $("#go").onclick = () => { run.i = 0; show(); };
@@ -427,13 +427,13 @@ function startInterview(id) {
     ctx.view().innerHTML = `${backBar(`Q${run.i + 1} / 4 ・ ${types[run.i]}`)}
       <section class="panel center">
         <button class="btn sub" id="play">▶ 質問を聞く</button>
-        <details style="margin-top:10px"><summary class="muted small">質問文を見る</summary><p class="ex">${esc(q)}</p></details>
+        <details style="margin-top:10px"><summary class="muted small">質問文を見る</summary><p class="ex">${esc(q)}</p>${set.questionsJa?.[run.i] ? `<p class="ja">${esc(set.questionsJa[run.i])}</p>` : ""}</details>
         <div class="bigtimer" id="count">45</div>
         ${canRecord() ? `<button class="btn" id="speak">● 回答開始（録音）</button>` : `<button class="btn" id="speak">回答開始（45秒）</button>`}
         <audio id="aud" controls hidden></audio>
       </section>
       <div id="ref"></div>
-      <div class="toolbar"><button class="btn sub" id="tpl">型を見る</button><button class="btn" id="next">${run.i < 3 ? "次の質問へ" : "振り返りへ"}</button></div>`;
+      <div class="toolbar"><button class="btn sub" id="tpl">型・模範解答</button><button class="btn" id="next">${run.i < 3 ? "次の質問へ" : "振り返りへ"}</button></div>`;
     bindBack();
     $("#play").onclick = () => ctx.speak(q);
     ctx.speak(q);
@@ -448,7 +448,9 @@ function startInterview(id) {
       timer = setInterval(() => { left--; const c = $("#count"); if (!c) return clearTimer(); c.textContent = left; if (left <= 0) { c.classList.add("over"); stopAnswer(); } }, 1000);
     };
     $("#tpl").onclick = () => {
-      $("#ref").innerHTML = tplFor(run.i).map((t) => `<section class="panel"><h2>${esc(t.title)}${badge(t)}</h2><p class="pre">${esc(plain(t.text))}</p></section>`).join("") || `<p class="muted">型が見つかりません</p>`;
+      const sample = D.templates.find((t) => t.note && norm(t.note) === norm(q));
+      const box = (t) => `<section class="panel"><h2>${esc(t.title)}${badge(t)}</h2><p class="pre">${esc(plain(t.text))}</p>${t.ja ? `<details class="jabox"><summary>和訳</summary><p class="ja pre">${esc(t.ja)}</p></details>` : ""}</section>`;
+      $("#ref").innerHTML = (tplFor(run.i).map(box).join("") || `<p class="muted">型が見つかりません</p>`) + (sample ? box({ ...sample, title: `この質問の${sample.title}` }) : "");
     };
     $("#next").onclick = () => { stopAnswer(); run.i++; if (run.i < 4) show(); else summary(); window.scrollTo(0, 0); };
   };
