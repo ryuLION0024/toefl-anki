@@ -163,3 +163,9 @@ label.check { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; 
 label.check:first-of-type { border-top: 0; }
 p.pre { white-space: pre-wrap; margin: 0; font-size: 15px; }
 .tabs button { font-size: 13px; }
+.tpl .key { color: var(--accent); background: var(--accent-soft); border-radius: 3px; }
+.kblank input { background-color: var(--accent-soft); }
+details.jabox { margin: 0 0 14px; }
+details.jabox summary { font-size: 13px; color: var(--accent); cursor: pointer; padding: 4px 0; }
+details.jabox .ja { margin-top: 6px; }
+p.ja.pre { white-space: pre-wrap; }

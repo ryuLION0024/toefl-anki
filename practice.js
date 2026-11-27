@@ -66,7 +66,7 @@ export function renderPractice() {
   ctx.view().innerHTML = `
     <section class="panel">
       <h2>テンプレート・模範解答の暗記（${done} / ${D.templates.length} 完全暗記）</h2>
-      <p class="muted small" style="margin-top:0">読む → 25% → 50% → 75% の穴埋め → 全文を書く、の5段階。9割正解で次の段階へ進みます。</p>
+      <p class="muted small" style="margin-top:0">読む → 型フレーズの半分 → 型フレーズすべて → 型＋その他 → 全文を書く、の5段階。9割正解で次の段階へ。どの画面でも「和訳」を開けます。</p>
       ${Object.entries(groups).map(([g, list]) => `
         <h3 class="sub">${esc(g)}</h3>
         <ul class="wlist">${list.map((t) => `<li data-tpl="${esc(t.id)}"><span class="m" style="color:var(--text);font-size:15px">${esc(t.title)}${badge(t)}</span>${lvDots(P.tpl[t.id]?.level || 0)}</li>`).join("")}</ul>`).join("")}
@@ -99,37 +99,95 @@ function backBar(title) {
 function bindBack() { $("#back").onclick = () => { speechSynthesis?.cancel?.(); rec.stop(); renderPractice(); window.scrollTo(0, 0); }; }
 
 // ---------------- テンプレート暗記 ----------------
+// [[ ]] で囲んだ部分が「型フレーズ」。印が無いもの（TST 原文など）は同じグループの型から自動で見つける
+const plain = (s) => s.replace(/\[\[|\]\]/g, "");
+const speakable = (s) => plain(s).replace(/\([^)]*\)/g, " ");
+
 function tokenize(text) {
-  const out = []; let paren = 0;
+  const out = []; let paren = 0, key = false;
   text.split("\n").forEach((line, li) => {
     if (li) out.push({ br: true });
-    line.split(/\s+/).filter(Boolean).forEach((tok) => {
+    line.split(/\s+/).filter(Boolean).forEach((raw) => {
+      const startKey = raw.includes("[[");
+      const endKey = raw.includes("]]");
+      const tok = plain(raw);
+      if (!tok) { if (startKey) key = true; if (endKey) key = false; return; }
+      const isKey = key || startKey;
+      if (startKey) key = true;
+      if (endKey) key = false;
       const opens = (tok.match(/\(/g) || []).length, closes = (tok.match(/\)/g) || []).length;
       const inParen = paren > 0 || opens > 0;
       paren += opens - closes; if (paren < 0) paren = 0;
       const m = tok.match(/^([^A-Za-z0-9']*)(.*?)([^A-Za-z0-9']*)$/);
       const core = m ? m[2] : tok;
-      out.push({ tok, paren: inParen, lead: m ? m[1] : "", core, trail: m ? m[3] : "", blankable: !inParen && /[A-Za-z]/.test(core) && core.replace(/[^A-Za-z]/g, "").length >= 2 });
+      out.push({ tok, key: isKey && !inParen, paren: inParen, lead: m ? m[1] : "", core, trail: m ? m[3] : "",
+        blankable: !inParen && /[A-Za-z]/.test(core) && core.replace(/[^A-Za-z]/g, "").length >= 2 });
     });
   });
   return out;
 }
+
+// 同じグループの「型」（タイトルに「型」を含む項目）に出てくる2〜8語の連なりを型フレーズとみなす
+function autoKeys(t, toks) {
+  if (toks.some((x) => x.key)) return;
+  const frames = data().templates.filter((f) => f.group === t.group && f.id !== t.id && /型|structure|template/i.test(f.title + f.id) && !/例|-ex$/.test(f.title + f.id));
+  const grams = new Set();
+  frames.forEach((f) => {
+    plain(f.text).split(/\([^)]*\)|\n|\.\.\.|…|[.?!](?=\s|$)/).forEach((seg) => {
+      const w = seg.split(/\s+/).map(norm).filter(Boolean);
+      for (let i = 0; i < w.length; i++) for (let n = 2; n <= 8 && i + n <= w.length; n++) grams.add(w.slice(i, i + n).join(" "));
+    });
+  });
+  if (!grams.size) return;
+  const idx = toks.map((x, i) => (x.br || x.paren || !norm(x.core) ? -1 : i)).filter((i) => i >= 0);
+  const words = idx.map((i) => norm(toks[i].core));
+  const ends = idx.map((i) => /[.?!]/.test(toks[i].trail)); // 文末の語を越えて一致させない
+  for (let s = 0; s < words.length; s++) {
+    let max = 1; while (max < 8 && s + max < words.length && !ends[s + max - 1]) max++;
+    for (let n = max; n >= 2; n--) {
+      const g = words.slice(s, s + n);
+      if (g.join("").length >= 9 && grams.has(g.join(" "))) { for (let k = s; k < s + n; k++) toks[idx[k]].key = true; s += n - 1; break; }
+    }
+  }
+}
+
+// 段階ごとの穴の選び方：1 = 型の半分、2 = 型すべて、3 = 型すべて＋その他40%。型が無い文章は 25/50/75%
+function pickBlanks(toks, lv) {
+  const all = toks.map((x, i) => (x.blankable ? i : -1)).filter((i) => i >= 0);
+  const key = all.filter((i) => toks[i].key), other = all.filter((i) => !toks[i].key);
+  if (key.length < 3) return new Set(shuffle(all).slice(0, Math.max(1, Math.round(all.length * LEVELS[lv]))));
+  if (lv === 1) return new Set(shuffle(key).slice(0, Math.ceil(key.length / 2)));
+  if (lv === 2) return new Set(key);
+  return new Set([...key, ...shuffle(other).slice(0, Math.round(other.length * 0.4))]);
+}
+const LV_LABEL = (hasKey) => hasKey
+  ? ["0：読んで覚える（色付き＝型フレーズ）", "1：型フレーズの半分を穴埋め", "2：型フレーズをすべて穴埋め", "3：型フレーズ＋その他40%を穴埋め", "4：何も見ずに全文を書く"]
+  : ["0：読んで覚える", "1：25% 穴埋め", "2：50% 穴埋め", "3：75% 穴埋め", "4：何も見ずに全文を書く"];
+
+function jaHtml(t, open) {
+  if (!t.ja && !t.noteJa) return t.tst ? `<p class="muted small">（TST 原文には和訳を付けていません）</p>` : "";
+  return `<details class="jabox"${open ? " open" : ""}><summary>和訳</summary>${t.noteJa ? `<p class="ja"><b>課題：</b>${esc(t.noteJa)}</p>` : ""}${t.ja ? `<p class="ja pre">${esc(t.ja)}</p>` : ""}</details>`;
+}
+const wordSpan = (x, cls = "") => `<span class="${[x.paren ? "ph" : "", x.key ? "key" : "", cls].filter(Boolean).join(" ")}">${esc(x.tok)}</span> `;
 
 function startTemplate(id) {
   const t = data().templates.find((x) => x.id === id);
   const P = prog();
   const lv = Math.min(P.tpl[id]?.level || 0, 4);
   const toks = tokenize(t.text);
+  autoKeys(t, toks);
+  const hasKey = toks.filter((x) => x.key && x.blankable).length >= 3;
   const head = `${backBar(t.title)}
     ${t.note ? `<p class="direction">${esc(t.note)}</p>` : ""}
-    <p class="muted small">段階 ${lv === 0 ? "0：まず読んで覚える" : lv === 4 ? "4：何も見ずに全文を書く" : `${lv}：${LEVELS[lv] * 100}% 穴埋め`} ${lvDots(P.tpl[id]?.level || 0)}</p>`;
+    <p class="muted small">段階 ${LV_LABEL(hasKey)[lv]} ${lvDots(P.tpl[id]?.level || 0)}</p>`;
 
   if (lv === 0) {
     ctx.view().innerHTML = `${head}
-      <section class="panel tpl">${toks.map((x) => (x.br ? "<br>" : `<span class="${x.paren ? "ph" : ""}">${esc(x.tok)}</span> `)).join("")}</section>
-      <div class="toolbar"><button class="btn sub" id="say">♪ 読み上げ</button><button class="btn" id="ok">覚えた → 25% 穴埋めへ</button></div>`;
+      <section class="panel tpl">${toks.map((x) => (x.br ? "<br>" : wordSpan(x))).join("")}</section>
+      ${jaHtml(t, true)}
+      <div class="toolbar"><button class="btn sub" id="say">♪ 読み上げ</button><button class="btn" id="ok">覚えた → 穴埋めへ</button></div>`;
     bindBack();
-    $("#say").onclick = () => ctx.speak(t.text.replace(/\([^)]*\)/g, " "));
+    $("#say").onclick = () => ctx.speak(speakable(t.text));
     $("#ok").onclick = () => { setTpl(id, 1); startTemplate(id); };
     return;
   }
@@ -137,38 +195,34 @@ function startTemplate(id) {
   if (lv === 4) {
     const target = toks.filter((x) => !x.br && x.blankable).map((x) => norm(x.core));
     ctx.view().innerHTML = `${head}
+      ${jaHtml(t, false)}
       <section class="panel"><textarea id="full" class="recall" placeholder="覚えた文章を全文書いてください（（ ）の部分は不要）" autocapitalize="sentences" autocorrect="off" spellcheck="false"></textarea></section>
       <div class="toolbar"><button class="btn sub" id="peek">1行目を見る</button><button class="btn" id="check">答え合わせ</button></div><div id="res"></div>`;
     bindBack();
-    $("#peek").onclick = () => { $("#res").innerHTML = `<div class="hintbox">${esc(t.text.split("\n")[0])}</div>`; };
+    $("#peek").onclick = () => { $("#res").innerHTML = `<div class="hintbox">${esc(plain(t.text).split("\n")[0])}</div>`; };
     $("#check").onclick = () => {
       const typed = $("#full").value.split(/\s+/).map(norm).filter(Boolean);
       const hit = lcsHits(target, typed);
       const score = target.length ? hit.size / target.length : 0;
       let i = 0;
-      const shown = toks.map((x) => {
-        if (x.br) return "<br>";
-        if (!x.blankable) return `<span class="${x.paren ? "ph" : ""}">${esc(x.tok)}</span> `;
-        const ok = hit.has(i++);
-        return `<span class="${ok ? "w-ok" : "w-ng"}">${esc(x.tok)}</span> `;
-      }).join("");
+      const shown = toks.map((x) => (x.br ? "<br>" : !x.blankable ? wordSpan(x) : wordSpan(x, hit.has(i++) ? "w-ok" : "w-ng"))).join("");
       finishTemplate(id, lv, score, shown);
     };
     return;
   }
 
-  // 1〜3：一部を穴埋め
-  const idx = toks.map((x, i) => (x.blankable ? i : -1)).filter((i) => i >= 0);
-  const pick = new Set(shuffle(idx).slice(0, Math.max(1, Math.round(idx.length * LEVELS[lv]))));
+  // 1〜3：型フレーズ優先の穴埋め
+  const pick = pickBlanks(toks, lv);
   ctx.view().innerHTML = `${head}
     <section class="panel tpl" id="tpl">${toks.map((x, i) => {
       if (x.br) return "<br>";
-      if (!pick.has(i)) return `<span class="${x.paren ? "ph" : ""}">${esc(x.tok)}</span> `;
-      return `${esc(x.lead)}<span class="blank"><input data-i="${i}" style="width:calc(${x.core.length}ch + 8px)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></span>${esc(x.trail)} `;
+      if (!pick.has(i)) return wordSpan(x);
+      return `${esc(x.lead)}<span class="blank${x.key ? " kblank" : ""}"><input data-i="${i}" style="width:calc(${x.core.length}ch + 8px)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></span>${esc(x.trail)} `;
     }).join("")}</section>
+    ${jaHtml(t, false)}
     <div class="toolbar"><button class="btn sub" id="say">♪</button><button class="btn" id="check">答え合わせ</button></div><div id="res"></div>`;
   bindBack();
-  $("#say").onclick = () => ctx.speak(t.text.replace(/\([^)]*\)/g, " "));
+  $("#say").onclick = () => ctx.speak(speakable(t.text));
   const inputs = [...ctx.view().querySelectorAll(".blank input")];
   inputs.forEach((inp, k) => inp.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || (e.key === " " && inp.value.trim())) { e.preventDefault(); inputs[k + 1] ? inputs[k + 1].focus() : $("#check").click(); }
@@ -394,7 +448,7 @@ function startInterview(id) {
       timer = setInterval(() => { left--; const c = $("#count"); if (!c) return clearTimer(); c.textContent = left; if (left <= 0) { c.classList.add("over"); stopAnswer(); } }, 1000);
     };
     $("#tpl").onclick = () => {
-      $("#ref").innerHTML = tplFor(run.i).map((t) => `<section class="panel"><h2>${esc(t.title)}${badge(t)}</h2><p class="pre">${esc(t.text)}</p></section>`).join("") || `<p class="muted">型が見つかりません</p>`;
+      $("#ref").innerHTML = tplFor(run.i).map((t) => `<section class="panel"><h2>${esc(t.title)}${badge(t)}</h2><p class="pre">${esc(plain(t.text))}</p></section>`).join("") || `<p class="muted">型が見つかりません</p>`;
     };
     $("#next").onclick = () => { stopAnswer(); run.i++; if (run.i < 4) show(); else summary(); window.scrollTo(0, 0); };
   };
