@@ -49,7 +49,7 @@ function data() {
 function prog() {
   const s = ctx.getState();
   s.practice ||= {};
-  s.practice.tpl ||= {}; s.practice.build ||= {}; s.practice.repeat ||= {}; s.practice.iv ||= {};
+  s.practice.tpl ||= {}; s.practice.notes ||= {}; s.practice.build ||= {}; s.practice.repeat ||= {}; s.practice.iv ||= {};
   return s.practice;
 }
 const badge = (x) => (x.tst ? ' <span class="tag">TST</span>' : "");
@@ -164,8 +164,29 @@ const LV_LABEL = (hasKey) => hasKey
   ? ["0：読んで覚える（色付き＝型フレーズ）", "1：型フレーズの半分を穴埋め", "2：型フレーズをすべて穴埋め", "3：型フレーズ＋その他40%を穴埋め", "4：何も見ずに全文を書く"]
   : ["0：読んで覚える", "1：25% 穴埋め", "2：50% 穴埋め", "3：75% 穴埋め", "4：何も見ずに全文を書く"];
 
+// TST 原文には自分で和訳を書く（学習記録と一緒に保存され、進捗のコピーで他の端末にも移る）
+function noteHtml(t, open) {
+  const note = prog().notes[t.id] || "";
+  return `<details class="jabox" id="notebox"${open && note ? " open" : ""}><summary>自分の和訳メモ${note ? "" : "（未記入）"}</summary>
+    <p class="ja pre" id="notetext"${note ? "" : " hidden"}>${esc(note)}</p>
+    <textarea id="noteedit" class="recall" rows="4" placeholder="この文章の和訳や覚え方のメモを書いて保存" ${note ? "hidden" : ""}>${esc(note)}</textarea>
+    <div class="row" style="margin-top:8px"><button class="btn sub" id="notebtn">${note ? "編集" : "保存"}</button></div></details>`;
+}
+function bindNote(t) {
+  const btn = $("#notebtn"); if (!btn) return;
+  btn.onclick = () => {
+    const ed = $("#noteedit"), tx = $("#notetext");
+    if (ed.hidden) { ed.hidden = false; tx.hidden = true; btn.textContent = "保存"; ed.focus(); return; }
+    const v = ed.value.trim(), P = prog();
+    if (v) P.notes[t.id] = v; else delete P.notes[t.id];
+    ctx.save();
+    tx.textContent = v; tx.hidden = !v; ed.hidden = !!v; btn.textContent = v ? "編集" : "保存";
+    $("#notebox summary").textContent = `自分の和訳メモ${v ? "" : "（未記入）"}`;
+  };
+}
+
 function jaHtml(t, open) {
-  if (!t.ja && !t.noteJa) return t.tst ? `<p class="muted small">（TST 原文には和訳を付けていません）</p>` : "";
+  if (!t.ja && !t.noteJa) return t.tst ? noteHtml(t, open) : "";
   return `<details class="jabox"${open ? " open" : ""}><summary>和訳</summary>${t.noteJa ? `<p class="ja"><b>課題：</b>${esc(t.noteJa)}</p>` : ""}${t.ja ? `<p class="ja pre">${esc(t.ja)}</p>` : ""}</details>`;
 }
 const wordSpan = (x, cls = "") => `<span class="${[x.paren ? "ph" : "", x.key ? "key" : "", cls].filter(Boolean).join(" ")}">${esc(x.tok)}</span> `;
@@ -186,7 +207,7 @@ function startTemplate(id) {
       <section class="panel tpl">${toks.map((x) => (x.br ? "<br>" : wordSpan(x))).join("")}</section>
       ${jaHtml(t, true)}
       <div class="toolbar"><button class="btn sub" id="say">♪ 読み上げ</button><button class="btn" id="ok">覚えた → 穴埋めへ</button></div>`;
-    bindBack();
+    bindBack(); bindNote(t);
     $("#say").onclick = () => ctx.speak(speakable(t.text));
     $("#ok").onclick = () => { setTpl(id, 1); startTemplate(id); };
     return;
@@ -198,7 +219,7 @@ function startTemplate(id) {
       ${jaHtml(t, false)}
       <section class="panel"><textarea id="full" class="recall" placeholder="覚えた文章を全文書いてください（（ ）の部分は不要）" autocapitalize="sentences" autocorrect="off" spellcheck="false"></textarea></section>
       <div class="toolbar"><button class="btn sub" id="peek">1行目を見る</button><button class="btn" id="check">答え合わせ</button></div><div id="res"></div>`;
-    bindBack();
+    bindBack(); bindNote(t);
     $("#peek").onclick = () => { $("#res").innerHTML = `<div class="hintbox">${esc(plain(t.text).split("\n")[0])}</div>`; };
     $("#check").onclick = () => {
       const typed = $("#full").value.split(/\s+/).map(norm).filter(Boolean);
@@ -221,7 +242,7 @@ function startTemplate(id) {
     }).join("")}</section>
     ${jaHtml(t, false)}
     <div class="toolbar"><button class="btn sub" id="say">♪</button><button class="btn" id="check">答え合わせ</button></div><div id="res"></div>`;
-  bindBack();
+  bindBack(); bindNote(t);
   $("#say").onclick = () => ctx.speak(speakable(t.text));
   const inputs = [...ctx.view().querySelectorAll(".blank input")];
   inputs.forEach((inp, k) => inp.addEventListener("keydown", (e) => {

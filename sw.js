@@ -1,5 +1,5 @@
 // コードやデータを変えたら上げる（古いキャッシュを確実に消すため）
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 const CACHE = `toefl-anki-${CACHE_VERSION}`;
 const CORE = [
   "./", "index.html", "style.css", "app.js", "practice.js", "manifest.webmanifest", "data/index.json",
