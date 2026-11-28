@@ -258,10 +258,28 @@ for pid, title, start in [(10, "Listen and Repeat", "Question Notes"), (20, "Tak
     items = [x.strip() for x in re.split(r"(?=Did I |What can I )", t) if x.strip()]
     pack["checklists"].append({"id": f"tst-cl-{title[:6].lower().replace(' ', '')}", "title": f"TST：{title} チェックリスト", "items": items})
 
+# ---------------- Word Parts（接頭辞） ----------------
+WP = " ".join(pages("essential-word-parts-list-2026.pdf")[1:])
+WP = WP.replace("TST Prep The Essential Word Parts List", " ")
+WP = re.sub(r"\s+", " ", WP)
+pre = WP[WP.find("Essential Prefixes"):WP.find("Essential Roots")]
+pack["prefixes"] = []
+for gm in re.finditer(r"Group (\d+) - (.+?) (?=1\. )(.+?)(?= Group \d+ - |$)", pre):
+    items = []
+    for im in re.finditer(r"(\d+)\. (.+?)(?= \d+\. |$)", gm.group(3)):
+        parts = [x.strip() for x in im.group(2).split(" - ")]
+        if len(parts) < 3:
+            problems.append(f"接頭辞の書式: {im.group(2)[:40]}")
+            continue
+        items.append({"p": parts[0], "m": " - ".join(parts[1:-1]), "ex": [w.strip(" .") for w in re.split(r",\s*|\s+(?=[a-z]+$)", parts[-1]) if w.strip(" .")]})
+    pack["prefixes"].append({"group": gm.group(2).strip(), "items": items})
+if sum(len(g["items"]) for g in pack["prefixes"]) < 50:
+    problems.append(f"接頭辞が {sum(len(g['items']) for g in pack['prefixes'])} 個しか取れていない")
+
 OUT.parent.mkdir(exist_ok=True)
 OUT.write_text(json.dumps(pack, ensure_ascii=False, indent=1))
 print(f"書き出し: {OUT}")
-for k in ("build", "repeat", "templates", "interview", "checklists"):
+for k in ("build", "repeat", "templates", "interview", "checklists", "prefixes"):
     print(f"  {k}: {len(pack[k])}")
 for p in problems:
     print("  要確認:", p)

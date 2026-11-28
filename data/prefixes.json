@@ -1,0 +1,1183 @@
+[
+ {
+  "group": "方向・位置",
+  "desc": "「どこへ・どこから・どこを通って」を表す接頭辞。学術語に最も多く、AWL 単語の分解でも頻出。",
+  "items": [
+   {
+    "p": "ab-",
+    "forms": "ab-, abs-, a-",
+    "m": "離れて",
+    "note": "「元の場所から離れる」イメージ。abs- は c・t の前で使われる形。",
+    "ex": [
+     {
+      "w": "abstract"
+     },
+     {
+      "w": "absorb",
+      "ja": "吸収する"
+     },
+     {
+      "w": "abnormal",
+      "ja": "異常な"
+     }
+    ]
+   },
+   {
+    "p": "ad-",
+    "forms": "ad-, ac-, af-, al-, ap-, as-, at-",
+    "m": "〜へ・〜に向かって",
+    "note": "後ろの子音に合わせて形が変わる（同化）。acc-・aff-・all-・app-・ass-・att- のように子音が重なっていたら ad- を疑う。",
+    "ex": [
+     {
+      "w": "adapt"
+     },
+     {
+      "w": "adjacent"
+     },
+     {
+      "w": "accumulate"
+     },
+     {
+      "w": "affect"
+     },
+     {
+      "w": "allocate"
+     },
+     {
+      "w": "approximate"
+     },
+     {
+      "w": "assess"
+     },
+     {
+      "w": "attain"
+     }
+    ]
+   },
+   {
+    "p": "circum-",
+    "forms": "circum-",
+    "m": "周りに・ぐるりと",
+    "note": "circle（円）と同じ語源。",
+    "ex": [
+     {
+      "w": "circumstance"
+     },
+     {
+      "w": "circumference",
+      "ja": "円周"
+     },
+     {
+      "w": "circumvent",
+      "ja": "回避する"
+     }
+    ]
+   },
+   {
+    "p": "con-",
+    "forms": "con-, com-, col-, cor-, co-",
+    "m": "共に・完全に",
+    "note": "「一緒に」と「すっかり（強調）」の2つの意味がある。b・m・p の前で com-、l の前で col-、r の前で cor- になる。",
+    "ex": [
+     {
+      "w": "concept"
+     },
+     {
+      "w": "conclude"
+     },
+     {
+      "w": "consist"
+     },
+     {
+      "w": "comprise"
+     },
+     {
+      "w": "collapse"
+     },
+     {
+      "w": "correspond"
+     },
+     {
+      "w": "cooperate"
+     }
+    ]
+   },
+   {
+    "p": "de-",
+    "forms": "de-",
+    "m": "下へ・離れて・完全に",
+    "note": "「下へ（decline）」「〜から離れて（derive）」「すっかり（define）」の3つを押さえる。",
+    "ex": [
+     {
+      "w": "decline"
+     },
+     {
+      "w": "derive"
+     },
+     {
+      "w": "define"
+     },
+     {
+      "w": "deviate"
+     },
+     {
+      "w": "deduce"
+     }
+    ]
+   },
+   {
+    "p": "dia-",
+    "forms": "dia-",
+    "m": "通して・横切って",
+    "note": "ギリシャ語由来。2点を結んで通る線のイメージ。",
+    "ex": [
+     {
+      "w": "diagram",
+      "ja": "図表"
+     },
+     {
+      "w": "dialogue",
+      "ja": "対話"
+     },
+     {
+      "w": "diameter",
+      "ja": "直径"
+     }
+    ]
+   },
+   {
+    "p": "ex-",
+    "forms": "ex-, e-, ef-",
+    "m": "外へ",
+    "note": "「外に出す・外に出る」。b・d・g・l・m・n・v などの前では e- だけになる（emerge, evaluate）。",
+    "ex": [
+     {
+      "w": "export"
+     },
+     {
+      "w": "exclude"
+     },
+     {
+      "w": "expand"
+     },
+     {
+      "w": "extract"
+     },
+     {
+      "w": "emerge"
+     },
+     {
+      "w": "evaluate"
+     }
+    ]
+   },
+   {
+    "p": "in-（中へ）",
+    "forms": "in-, im-, il-, ir-",
+    "m": "中へ・上に",
+    "note": "否定の in- と同じ形なので文脈で区別する。insert（中へ入れる）は「中へ」、invisible（見えない）は「否定」。",
+    "ex": [
+     {
+      "w": "insert"
+     },
+     {
+      "w": "inspect"
+     },
+     {
+      "w": "involve"
+     },
+     {
+      "w": "incorporate"
+     },
+     {
+      "w": "impose"
+     },
+     {
+      "w": "implicit"
+     }
+    ]
+   },
+   {
+    "p": "inter-",
+    "forms": "inter-",
+    "m": "間に・相互に",
+    "note": "「AとBの間」。international、internet でおなじみ。",
+    "ex": [
+     {
+      "w": "interact"
+     },
+     {
+      "w": "interval"
+     },
+     {
+      "w": "intervene"
+     },
+     {
+      "w": "interpret"
+     },
+     {
+      "w": "intermediate"
+     }
+    ]
+   },
+   {
+    "p": "per-",
+    "forms": "per-",
+    "m": "通して・完全に",
+    "note": "「端から端まで通して」→「最後まで・完全に」。",
+    "ex": [
+     {
+      "w": "perceive"
+     },
+     {
+      "w": "persist"
+     },
+     {
+      "w": "perspective"
+     }
+    ]
+   },
+   {
+    "p": "peri-",
+    "forms": "peri-",
+    "m": "周りに",
+    "note": "ギリシャ語由来。per- と混同しない。",
+    "ex": [
+     {
+      "w": "period"
+     },
+     {
+      "w": "perimeter",
+      "ja": "周囲（の長さ）"
+     },
+     {
+      "w": "peripheral",
+      "ja": "周辺の"
+     }
+    ]
+   },
+   {
+    "p": "pro-",
+    "forms": "pro-, pur-",
+    "m": "前へ・前に",
+    "note": "「前へ進める」。pur- はフランス語経由の形（pursue, purchase）。",
+    "ex": [
+     {
+      "w": "proceed"
+     },
+     {
+      "w": "promote"
+     },
+     {
+      "w": "project"
+     },
+     {
+      "w": "prohibit"
+     },
+     {
+      "w": "pursue"
+     }
+    ]
+   },
+   {
+    "p": "re-",
+    "forms": "re-",
+    "m": "再び・後ろへ・元へ",
+    "note": "「もう一度（revise）」と「後ろへ・元へ（retain, reverse）」の2つの意味がある。",
+    "ex": [
+     {
+      "w": "revise"
+     },
+     {
+      "w": "restore"
+     },
+     {
+      "w": "retain"
+     },
+     {
+      "w": "reverse"
+     },
+     {
+      "w": "respond"
+     },
+     {
+      "w": "require"
+     }
+    ]
+   },
+   {
+    "p": "sub-",
+    "forms": "sub-, suc-, suf-, sup-, sus-",
+    "m": "下に・下から",
+    "note": "同化で形が変わる（succeed, sufficient, supplement, sustain）。「下から支える」の意味も多い。",
+    "ex": [
+     {
+      "w": "submit"
+     },
+     {
+      "w": "subsequent"
+     },
+     {
+      "w": "substitute"
+     },
+     {
+      "w": "sufficient"
+     },
+     {
+      "w": "supplement"
+     },
+     {
+      "w": "sustain"
+     }
+    ]
+   },
+   {
+    "p": "super-",
+    "forms": "super-, sur-",
+    "m": "上に・越えて",
+    "note": "sur- はフランス語経由の形（survey は「上から見る」）。",
+    "ex": [
+     {
+      "w": "survey"
+     },
+     {
+      "w": "survive"
+     },
+     {
+      "w": "superior",
+      "ja": "より優れた"
+     }
+    ]
+   },
+   {
+    "p": "syn-",
+    "forms": "syn-, sym-",
+    "m": "共に・同時に",
+    "note": "ギリシャ語由来で、ラテン語の con- にあたる。b・m・p の前で sym-。",
+    "ex": [
+     {
+      "w": "symbol"
+     },
+     {
+      "w": "synthesis",
+      "ja": "統合・合成"
+     },
+     {
+      "w": "symmetry",
+      "ja": "対称"
+     }
+    ]
+   },
+   {
+    "p": "tele-",
+    "forms": "tele-",
+    "m": "遠くの",
+    "note": "ギリシャ語由来。",
+    "ex": [
+     {
+      "w": "telescope",
+      "ja": "望遠鏡"
+     },
+     {
+      "w": "telecommunication",
+      "ja": "遠距離通信"
+     }
+    ]
+   },
+   {
+    "p": "trans-",
+    "forms": "trans-, tra-",
+    "m": "越えて・向こうへ",
+    "note": "「AからBへ移す」。tradition は tra- の形。",
+    "ex": [
+     {
+      "w": "transfer"
+     },
+     {
+      "w": "transform"
+     },
+     {
+      "w": "transmit"
+     },
+     {
+      "w": "transport"
+     },
+     {
+      "w": "transit"
+     },
+     {
+      "w": "tradition"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "group": "時間・順序",
+  "desc": "「前・後・再び・新しい」など、時間の流れを表す接頭辞。",
+  "items": [
+   {
+    "p": "pre-",
+    "forms": "pre-",
+    "m": "前に・先に",
+    "note": "「前もって」。",
+    "ex": [
+     {
+      "w": "predict"
+     },
+     {
+      "w": "precede"
+     },
+     {
+      "w": "preliminary"
+     },
+     {
+      "w": "presume"
+     },
+     {
+      "w": "previous"
+     }
+    ]
+   },
+   {
+    "p": "post-",
+    "forms": "post-",
+    "m": "後で",
+    "note": "pre- の反対。",
+    "ex": [
+     {
+      "w": "postpone",
+      "ja": "延期する"
+     },
+     {
+      "w": "postgraduate",
+      "ja": "大学院の"
+     },
+     {
+      "w": "postwar",
+      "ja": "戦後の"
+     }
+    ]
+   },
+   {
+    "p": "fore-",
+    "forms": "fore-",
+    "m": "前に・先に",
+    "note": "英語本来の接頭辞で、意味は pre- に近い。",
+    "ex": [
+     {
+      "w": "forecast",
+      "ja": "予報（する）"
+     },
+     {
+      "w": "foresee",
+      "ja": "予見する"
+     }
+    ]
+   },
+   {
+    "p": "ante-",
+    "forms": "ante-, anti-（まれに）",
+    "m": "前に",
+    "note": "anticipate の anti- は「反対」ではなく「前」（ante- の変化形）。",
+    "ex": [
+     {
+      "w": "anticipate"
+     },
+     {
+      "w": "antecedent",
+      "ja": "先行するもの"
+     }
+    ]
+   },
+   {
+    "p": "neo-",
+    "forms": "neo-",
+    "m": "新しい",
+    "note": "ギリシャ語由来。",
+    "ex": [
+     {
+      "w": "neolithic",
+      "ja": "新石器時代の"
+     },
+     {
+      "w": "neoclassical",
+      "ja": "新古典主義の"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "group": "数・量",
+  "desc": "数を表す接頭辞。統計・科学の文章で頻出。",
+  "items": [
+   {
+    "p": "mono- / uni-",
+    "forms": "mono-（ギリシャ語）, uni-（ラテン語）",
+    "m": "1つの",
+    "note": "どちらも「1」。uni- は「1つにまとまった」の意味でもよく使う。",
+    "ex": [
+     {
+      "w": "uniform"
+     },
+     {
+      "w": "unify"
+     },
+     {
+      "w": "unique"
+     },
+     {
+      "w": "monopoly",
+      "ja": "独占"
+     }
+    ]
+   },
+   {
+    "p": "bi- / du-",
+    "forms": "bi-, du-",
+    "m": "2つの",
+    "note": "bi- はラテン語、du- は two と同じ語源。",
+    "ex": [
+     {
+      "w": "bilingual",
+      "ja": "2言語を話す"
+     },
+     {
+      "w": "dual",
+      "ja": "二重の"
+     },
+     {
+      "w": "duplicate",
+      "ja": "複製する"
+     }
+    ]
+   },
+   {
+    "p": "tri-",
+    "forms": "tri-",
+    "m": "3つの",
+    "note": "",
+    "ex": [
+     {
+      "w": "triangle",
+      "ja": "三角形"
+     },
+     {
+      "w": "triple",
+      "ja": "3倍の"
+     }
+    ]
+   },
+   {
+    "p": "quad-",
+    "forms": "quad-, quadr-",
+    "m": "4つの",
+    "note": "",
+    "ex": [
+     {
+      "w": "quadruple",
+      "ja": "4倍にする"
+     },
+     {
+      "w": "quarter",
+      "ja": "4分の1（参考）"
+     }
+    ]
+   },
+   {
+    "p": "cent-",
+    "forms": "cent-",
+    "m": "100",
+    "note": "percent は「100につき」。",
+    "ex": [
+     {
+      "w": "percent"
+     },
+     {
+      "w": "century",
+      "ja": "世紀"
+     }
+    ]
+   },
+   {
+    "p": "mill-",
+    "forms": "mill-, milli-",
+    "m": "1000",
+    "note": "milli- は「1000分の1」の単位にも使う。",
+    "ex": [
+     {
+      "w": "millennium",
+      "ja": "千年紀"
+     },
+     {
+      "w": "millimeter",
+      "ja": "ミリメートル"
+     }
+    ]
+   },
+   {
+    "p": "multi- / poly-",
+    "forms": "multi-（ラテン語）, poly-（ギリシャ語）",
+    "m": "多くの",
+    "note": "どちらも「たくさん」。",
+    "ex": [
+     {
+      "w": "multiple",
+      "ja": "多数の"
+     },
+     {
+      "w": "multicultural",
+      "ja": "多文化の"
+     },
+     {
+      "w": "polygon",
+      "ja": "多角形"
+     }
+    ]
+   },
+   {
+    "p": "semi- / hemi-",
+    "forms": "semi-, hemi-",
+    "m": "半分",
+    "note": "hemi- はギリシャ語（hemisphere＝半球）。",
+    "ex": [
+     {
+      "w": "semifinal",
+      "ja": "準決勝"
+     },
+     {
+      "w": "hemisphere",
+      "ja": "半球"
+     }
+    ]
+   },
+   {
+    "p": "equi-",
+    "forms": "equi-, equ-",
+    "m": "等しい",
+    "note": "equal と同じ語源。",
+    "ex": [
+     {
+      "w": "equivalent"
+     },
+     {
+      "w": "equate"
+     },
+     {
+      "w": "adequate"
+     }
+    ]
+   },
+   {
+    "p": "pan-",
+    "forms": "pan-",
+    "m": "すべての",
+    "note": "ギリシャ語由来。",
+    "ex": [
+     {
+      "w": "pandemic",
+      "ja": "世界的流行病"
+     },
+     {
+      "w": "panorama",
+      "ja": "全景"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "group": "否定・反対",
+  "desc": "意味をひっくり返す接頭辞。読解で語の意味を逆にとらえるミスを防ぐのに重要。",
+  "items": [
+   {
+    "p": "in-（否定）",
+    "forms": "in-, im-, il-, ir-",
+    "m": "〜でない",
+    "note": "後ろの音に合わせて変化：p・b・m の前で im-、l の前で il-、r の前で ir-。",
+    "ex": [
+     {
+      "w": "inevitable"
+     },
+     {
+      "w": "individual"
+     },
+     {
+      "w": "invisible",
+      "ja": "目に見えない"
+     },
+     {
+      "w": "immature",
+      "ja": "未熟な"
+     },
+     {
+      "w": "illegal",
+      "ja": "違法の"
+     },
+     {
+      "w": "irrational",
+      "ja": "不合理な"
+     }
+    ]
+   },
+   {
+    "p": "un-",
+    "forms": "un-",
+    "m": "〜でない・逆の動作",
+    "note": "英語本来の否定。形容詞なら「〜でない（unstable）」、動詞なら「元に戻す（undo）」。",
+    "ex": [
+     {
+      "w": "unstable",
+      "ja": "不安定な"
+     },
+     {
+      "w": "unlikely",
+      "ja": "ありそうにない"
+     },
+     {
+      "w": "undo",
+      "ja": "元に戻す"
+     }
+    ]
+   },
+   {
+    "p": "non-",
+    "forms": "non-",
+    "m": "〜でない・非〜",
+    "note": "単純な「〜以外」。名詞にもよく付く。",
+    "ex": [
+     {
+      "w": "nonetheless"
+     },
+     {
+      "w": "nonrenewable",
+      "ja": "再生不可能な"
+     },
+     {
+      "w": "nonfiction",
+      "ja": "ノンフィクション"
+     }
+    ]
+   },
+   {
+    "p": "a- / an-",
+    "forms": "a-, an-",
+    "m": "〜がない",
+    "note": "ギリシャ語由来。母音の前で an-。",
+    "ex": [
+     {
+      "w": "atypical",
+      "ja": "典型的でない"
+     },
+     {
+      "w": "anonymous",
+      "ja": "匿名の"
+     }
+    ]
+   },
+   {
+    "p": "dis-",
+    "forms": "dis-, dif-, di-",
+    "m": "離れて・反対・否定",
+    "note": "「ばらばらに（distribute）」と「否定・反対（disagree）」の両方がある。",
+    "ex": [
+     {
+      "w": "distribute"
+     },
+     {
+      "w": "displace"
+     },
+     {
+      "w": "distinct"
+     },
+     {
+      "w": "discrete"
+     },
+     {
+      "w": "diverse"
+     }
+    ]
+   },
+   {
+    "p": "anti-",
+    "forms": "anti-, ant-",
+    "m": "反対の・対抗する",
+    "note": "anticipate の anti- は別物（「前に」）なので注意。",
+    "ex": [
+     {
+      "w": "antibiotic",
+      "ja": "抗生物質"
+     },
+     {
+      "w": "antisocial",
+      "ja": "反社会的な"
+     }
+    ]
+   },
+   {
+    "p": "contra- / counter-",
+    "forms": "contra-, contro-, counter-",
+    "m": "逆に・反対に",
+    "note": "counter- はフランス語経由の形。",
+    "ex": [
+     {
+      "w": "contradict"
+     },
+     {
+      "w": "contrary"
+     },
+     {
+      "w": "contrast"
+     },
+     {
+      "w": "controversy"
+     },
+     {
+      "w": "counterpart",
+      "ja": "対応する相手"
+     }
+    ]
+   },
+   {
+    "p": "mal-",
+    "forms": "mal-",
+    "m": "悪く・誤って",
+    "note": "",
+    "ex": [
+     {
+      "w": "malfunction",
+      "ja": "誤作動"
+     },
+     {
+      "w": "malnutrition",
+      "ja": "栄養失調"
+     }
+    ]
+   },
+   {
+    "p": "mis-",
+    "forms": "mis-",
+    "m": "誤って",
+    "note": "",
+    "ex": [
+     {
+      "w": "misinterpret",
+      "ja": "誤解する"
+     },
+     {
+      "w": "mislead",
+      "ja": "誤解させる"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "group": "程度・性質",
+  "desc": "「過剰・不足・自分で・〜にする」など、程度や性質を加える接頭辞。",
+  "items": [
+   {
+    "p": "over-",
+    "forms": "over-",
+    "m": "上に・越えて・過度に",
+    "note": "",
+    "ex": [
+     {
+      "w": "overall"
+     },
+     {
+      "w": "overlap"
+     },
+     {
+      "w": "overseas"
+     }
+    ]
+   },
+   {
+    "p": "under-",
+    "forms": "under-",
+    "m": "下に・不足して",
+    "note": "underlie（根底にある）のように「下にあって支える」意味も。",
+    "ex": [
+     {
+      "w": "undergo"
+     },
+     {
+      "w": "underlie"
+     },
+     {
+      "w": "undertake"
+     }
+    ]
+   },
+   {
+    "p": "hyper-",
+    "forms": "hyper-",
+    "m": "過度に",
+    "note": "ギリシャ語由来。反対は hypo-（下に・不足）。",
+    "ex": [
+     {
+      "w": "hypertension",
+      "ja": "高血圧"
+     },
+     {
+      "w": "hyperactive",
+      "ja": "過度に活発な"
+     }
+    ]
+   },
+   {
+    "p": "ultra-",
+    "forms": "ultra-, ult-",
+    "m": "越えて・極端に",
+    "note": "ultimate は「一番遠い→最終の」。",
+    "ex": [
+     {
+      "w": "ultimate"
+     },
+     {
+      "w": "ultraviolet",
+      "ja": "紫外線"
+     }
+    ]
+   },
+   {
+    "p": "auto-",
+    "forms": "auto-",
+    "m": "自分で",
+    "note": "ギリシャ語由来。",
+    "ex": [
+     {
+      "w": "automate"
+     },
+     {
+      "w": "autonomy",
+      "ja": "自治・自律"
+     }
+    ]
+   },
+   {
+    "p": "en- / em-",
+    "forms": "en-, em-",
+    "m": "〜にする・中に入れる",
+    "note": "形容詞・名詞を動詞にする（able → enable）。b・p・m の前で em-。",
+    "ex": [
+     {
+      "w": "enable"
+     },
+     {
+      "w": "enforce"
+     },
+     {
+      "w": "enhance"
+     },
+     {
+      "w": "ensure"
+     },
+     {
+      "w": "encounter"
+     },
+     {
+      "w": "emphasis"
+     }
+    ]
+   },
+   {
+    "p": "meta-",
+    "forms": "meta-, met-, meth-",
+    "m": "後に・変化・越えて",
+    "note": "method は「道筋を追って」。",
+    "ex": [
+     {
+      "w": "method"
+     },
+     {
+      "w": "metaphor",
+      "ja": "比喩"
+     }
+    ]
+   },
+   {
+    "p": "ana-",
+    "forms": "ana-",
+    "m": "上へ・再び・〜に従って",
+    "note": "",
+    "ex": [
+     {
+      "w": "analyze"
+     },
+     {
+      "w": "analogy"
+     }
+    ]
+   },
+   {
+    "p": "para-",
+    "forms": "para-",
+    "m": "そばに・並んで",
+    "note": "",
+    "ex": [
+     {
+      "w": "parallel"
+     },
+     {
+      "w": "paragraph"
+     },
+     {
+      "w": "parameter"
+     },
+     {
+      "w": "paradigm"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "group": "学問・自然",
+  "desc": "学問分野や自然物を表す接頭辞。Reading の学術文で、分野を見抜く手がかりになる。",
+  "items": [
+   {
+    "p": "astro-",
+    "forms": "astro-, aster-",
+    "m": "星・宇宙",
+    "note": "",
+    "ex": [
+     {
+      "w": "astronomy",
+      "ja": "天文学"
+     },
+     {
+      "w": "astronaut",
+      "ja": "宇宙飛行士"
+     }
+    ]
+   },
+   {
+    "p": "bio-",
+    "forms": "bio-",
+    "m": "生命",
+    "note": "",
+    "ex": [
+     {
+      "w": "biology",
+      "ja": "生物学"
+     },
+     {
+      "w": "biodiversity",
+      "ja": "生物多様性"
+     }
+    ]
+   },
+   {
+    "p": "geo-",
+    "forms": "geo-",
+    "m": "地球・土地",
+    "note": "",
+    "ex": [
+     {
+      "w": "geology",
+      "ja": "地質学"
+     },
+     {
+      "w": "geography",
+      "ja": "地理学"
+     }
+    ]
+   },
+   {
+    "p": "hydro-",
+    "forms": "hydro-, hydr-",
+    "m": "水",
+    "note": "",
+    "ex": [
+     {
+      "w": "hydroelectric",
+      "ja": "水力発電の"
+     },
+     {
+      "w": "dehydrate",
+      "ja": "脱水する"
+     }
+    ]
+   },
+   {
+    "p": "neuro-",
+    "forms": "neuro-, neur-",
+    "m": "神経",
+    "note": "",
+    "ex": [
+     {
+      "w": "neuron",
+      "ja": "神経細胞"
+     },
+     {
+      "w": "neuroscience",
+      "ja": "神経科学"
+     }
+    ]
+   },
+   {
+    "p": "psycho-",
+    "forms": "psycho-, psych-",
+    "m": "心・精神",
+    "note": "",
+    "ex": [
+     {
+      "w": "psychology"
+     }
+    ]
+   },
+   {
+    "p": "socio-",
+    "forms": "socio-",
+    "m": "社会",
+    "note": "",
+    "ex": [
+     {
+      "w": "sociology",
+      "ja": "社会学"
+     },
+     {
+      "w": "socioeconomic",
+      "ja": "社会経済的な"
+     }
+    ]
+   },
+   {
+    "p": "thermo-",
+    "forms": "thermo-, therm-",
+    "m": "熱",
+    "note": "",
+    "ex": [
+     {
+      "w": "thermometer",
+      "ja": "温度計"
+     },
+     {
+      "w": "thermal",
+      "ja": "熱の"
+     }
+    ]
+   },
+   {
+    "p": "techno-",
+    "forms": "techno-, techn-",
+    "m": "技術",
+    "note": "",
+    "ex": [
+     {
+      "w": "technology"
+     },
+     {
+      "w": "technique"
+     },
+     {
+      "w": "technical"
+     }
+    ]
+   }
+  ]
+ }
+]

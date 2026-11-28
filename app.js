@@ -13,7 +13,7 @@ const today0 = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.ge
 const dayKey = (t = Date.now()) => { const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
 const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
-let WORDS = [], WMAP = {}, PASSAGES = [], state;
+let WORDS = [], WMAP = {}, PASSAGES = [], PREFIXES = [], state;
 
 // ---------- 保存 ----------
 function blankState() {
@@ -339,13 +339,15 @@ function speak(text) {
   } catch { /* 読み上げ非対応 */ }
 }
 
-let wordFilter = "all", wordQuery = "";
+let wordFilter = "all", wordQuery = "", listMode = "words", prefixMode = "own", prefixQuery = "";
 function renderWords() {
+  if (listMode === "prefix") return renderPrefixes();
   const f = { all: "全て", fresh: "未学習", learning: "学習中", mastered: "習得", weak: "苦手" };
-  view().innerHTML = `
+  view().innerHTML = `${modeTabs()}
     <input class="search" id="q" placeholder="単語・意味で検索" value="${esc(wordQuery)}" autocapitalize="off" autocorrect="off">
     <div class="filters">${Object.entries(f).map(([k, v]) => `<button data-f="${k}" class="${k === wordFilter ? "on" : ""}">${v}</button>`).join("")}</div>
     <ul class="wlist" id="wl"></ul>`;
+  bindModeTabs();
   const draw = () => {
     const q = wordQuery.toLowerCase();
     const list = WORDS.filter((w) => {
@@ -360,6 +362,79 @@ function renderWords() {
   view().querySelectorAll(".filters button").forEach((b) => b.onclick = () => { wordFilter = b.dataset.f; renderWords(); });
   draw();
 }
+
+const modeTabs = () => `<div class="seg2"><button data-m="words" class="${listMode === "words" ? "on" : ""}">単語（${WORDS.length}）</button><button data-m="prefix" class="${listMode === "prefix" ? "on" : ""}">接頭辞</button></div>`;
+function bindModeTabs() { view().querySelectorAll(".seg2 [data-m]").forEach((b) => b.onclick = () => { listMode = b.dataset.m; renderWords(); window.scrollTo(0, 0); }); }
+
+// ---------- 接頭辞ガイド ----------
+const shortJa = (w) => (WMAP[w]?.ja || "").split(/[；;]/)[0];
+const tokensOf = (s) => s.toLowerCase().replace(/（[^）]*）|\([^)]*\)/g, " ").split(/[\s,\/、]+/).map((x) => x.replace(/-/g, "")).filter(Boolean);
+const exHtml = (list) => list.map((e) => {
+  const w = typeof e === "string" ? e : e.w;
+  const ja = (typeof e === "object" && e.ja) || shortJa(w);
+  return WMAP[w]
+    ? `<button class="exw awl" data-w="${esc(w)}">${esc(w)}<small>${esc(ja)}</small></button>`
+    : `<span class="exw">${esc(w)}${ja ? `<small>${esc(ja)}</small>` : ""}</span>`;
+}).join("");
+const prefixMatch = (q) => (s) => !q || s.toLowerCase().includes(q);
+
+function renderPrefixes() {
+  const pack = loadPackSafe();
+  const tst = pack?.prefixes?.length ? pack.prefixes : null;
+  if (!tst) prefixMode = "own";
+  view().innerHTML = `${modeTabs()}
+    <input class="search" id="pq" placeholder="接頭辞・意味・例語で検索（例：ex、外へ、export）" value="${esc(prefixQuery)}" autocapitalize="off" autocorrect="off">
+    ${tst ? `<div class="filters"><button data-pm="own" class="${prefixMode === "own" ? "on" : ""}">意味別（オリジナル）</button><button data-pm="tst" class="${prefixMode === "tst" ? "on" : ""}">TST の一覧（${tst.reduce((a, g) => a + g.items.length, 0)}）</button></div>` : ""}
+    <p class="muted small">青い例語はアプリの AWL 単語です。タップすると語源つきの単語カードが開きます。</p>
+    <div id="plist"></div>`;
+  bindModeTabs();
+  view().querySelectorAll("[data-pm]").forEach((b) => b.onclick = () => { prefixMode = b.dataset.pm; renderPrefixes(); });
+  const draw = () => {
+    const q = prefixQuery.trim().toLowerCase();
+    const has = prefixMatch(q);
+    let html = "";
+    if (prefixMode === "tst" && tst) {
+      // TST の並び。日本語の解説はオリジナル版から同じ接頭辞を探して付ける
+      const prefer = { "Location and Movement": "方向・位置", Numbers: "数・量", Negatives: "否定・反対", Academics: "学問・自然" };
+      const own = PREFIXES.flatMap((g) => g.items.map((it) => ({ ...it, group: g.group, toks: tokensOf(it.forms + " " + it.p) })));
+      tst.forEach((g) => {
+        const items = g.items.map((it) => {
+          const tk = tokensOf(it.p);
+          const cands = own.filter((o) => tk.some((t) => o.toks.includes(t)));
+          const mine = cands.find((o) => o.group === prefer[g.group]) || cands[0];
+          return { it, mine };
+        }).filter(({ it, mine }) => has(it.p) || has(it.m) || it.ex.some(has) || (mine && (has(mine.m) || has(mine.note))));
+        if (!items.length) return;
+        const gja = { "Location and Movement": "位置と移動", Numbers: "数", Negatives: "否定", Academics: "学問分野", "More Prefixes": "その他" }[g.group];
+        html += `<details class="pgroup" open><summary>${esc(g.group)}${gja ? ` <span class="small">${esc(gja)}</span>` : ""}<span class="muted small">（${items.length}）</span></summary>
+          ${items.map(({ it, mine }) => `<div class="pcard">
+            <div class="phead"><span class="pfx">${esc(it.p)}-</span><span class="pm">${esc(mine ? mine.m : "")}</span><span class="tag">TST</span></div>
+            <p class="small muted" style="margin:2px 0">${esc(it.m)}</p>
+            ${mine?.note ? `<p class="small" style="margin:2px 0 6px">${esc(mine.note)}</p>` : ""}
+            <div class="exlist">${exHtml(it.ex)}</div></div>`).join("")}
+        </details>`;
+      });
+    } else {
+      PREFIXES.forEach((g) => {
+        const items = g.items.filter((it) => has(it.p) || has(it.forms) || has(it.m) || has(it.note) || it.ex.some((e) => has(e.w) || has(e.ja || shortJa(e.w))));
+        if (!items.length) return;
+        html += `<details class="pgroup" open><summary>${esc(g.group)}<span class="muted small">（${items.length}）</span></summary>
+          <p class="small muted" style="margin:4px 0 8px">${esc(g.desc)}</p>
+          ${items.map((it) => `<div class="pcard">
+            <div class="phead"><span class="pfx">${esc(it.p)}</span><span class="pm">${esc(it.m)}</span></div>
+            ${it.forms && it.forms !== it.p ? `<p class="small muted" style="margin:2px 0">形：${esc(it.forms)}</p>` : ""}
+            ${it.note ? `<p class="small" style="margin:2px 0 6px">${esc(it.note)}</p>` : ""}
+            <div class="exlist">${exHtml(it.ex)}</div></div>`).join("")}
+        </details>`;
+      });
+    }
+    $("#plist").innerHTML = html || `<p class="muted">該当なし</p>`;
+    view().querySelectorAll("#plist .awl").forEach((b) => b.onclick = () => openCard(b.dataset.w));
+  };
+  $("#pq").oninput = (e) => { prefixQuery = e.target.value; draw(); };
+  draw();
+}
+const loadPackSafe = () => { try { return JSON.parse(localStorage.getItem("toefl-anki-pack") || "null"); } catch { return null; } };
 
 function renderSettings() {
   const recent = [...state.history].reverse().slice(0, 14);
@@ -440,6 +515,7 @@ async function init() {
     PASSAGES = parts.flatMap(([, p]) => p);
     PASSAGES.forEach((p) => { p.heads = tokens(p.text).filter((x) => x.head).map((x) => x.head); });
     WMAP = Object.fromEntries(WORDS.map((x) => [x.w, x]));
+    PREFIXES = await get("data/prefixes.json").catch(() => []);
     await initPractice({ view, getState: () => state, save, speak });
   } catch {
     view().innerHTML = `<p class="panel">データを読み込めませんでした。一度オンラインで開いてください。</p>`;

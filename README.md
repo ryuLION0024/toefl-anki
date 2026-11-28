@@ -24,13 +24,17 @@ http://localhost:8640 を開く。
 
 テンプレート・模範解答の段階的暗記、Build a Sentence、Listen and Repeat（録音・書き取り）、Take an Interview（45秒・録音）。公開版の問題と模範解答はすべてオリジナル。
 
-TST Prep の PDF の原文（テンプレート・模範解答・例題・チェックリスト）を使うには、Mac で個人用データを作る:
+TST Prep の PDF の原文（テンプレート・模範解答・例題・チェックリスト・Essential Prefixes の一覧）を使うには、Mac で個人用データを作る:
 
 ```bash
 python3 tools/build_private_pack.py ~/Desktop/12.英語勉強/TSTprep
 ```
 
 できた `private/tstprep-pack.json`（git 管理外）を、各端末の「記録・設定 → TST Prep 個人用データ → ファイルを選ぶ」で読み込む。iPhone へは AirDrop で送り「ファイル」アプリに保存してから選ぶ。データは端末内にだけ保存され、ネットには出ない。
+
+## 接頭辞ガイド
+
+「単語一覧」タブの「接頭辞」で、意味別に分けた60の接頭辞を日本語の解説付きで見られる（`data/prefixes.json`、オリジナル）。例語のうち AWL 単語はタップで単語カードが開く。個人用データを読み込むと TST の54接頭辞の一覧にも切り替えられる。
 
 ## 端末間の進捗移行
 
