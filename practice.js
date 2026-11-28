@@ -82,8 +82,13 @@ export function renderPractice() {
       <ul class="wlist">${D.repeat.map((r) => `<li data-lr="${esc(r.id)}"><span class="m" style="color:var(--text);font-size:15px">${esc(r.title)}${badge(r)}</span><span class="muted small">${P.repeat[r.id]?.best != null ? `書き取り最高 ${P.repeat[r.id].best}%` : "未挑戦"}</span></li>`).join("")}</ul>
     </section>
     <section class="panel">
+      <h2>最初の一文ドリル</h2>
+      <p class="muted small" style="margin-top:0">Interview の質問を聞いて、5秒以内に型を使った最初の一文を言う練習。1回10問・2分ほど。${P.drill ? `自己ベスト ${P.drill.best}/10` : ""}</p>
+      <button class="btn" id="drill">10問に挑戦</button>
+    </section>
+    <section class="panel">
       <h2>Take an Interview</h2>
-      <p class="muted small" style="margin-top:0">質問を聞いて、準備なしで45秒話します。録音を聞き返し、型とチェックリストで振り返ります。</p>
+      <p class="muted small" style="margin-top:0">質問を聞いて、準備なしで45秒話します。時間配分の目安を見ながら話し、文字起こしの自動チェックと録音で振り返ります。</p>
       <ul class="wlist">${D.interview.map((r) => `<li data-iv="${esc(r.id)}"><span class="m" style="color:var(--text);font-size:15px">${esc(r.topic)}${badge(r)}</span><span class="muted small">${P.iv[r.id] ? `${P.iv[r.id]}回` : "未挑戦"}</span></li>`).join("")}</ul>
     </section>
     ${D.hasPack ? "" : `<p class="muted small">「記録・設定」から TST Prep の個人用データを読み込むと、PDF のテンプレート・模範解答・例題もここに加わります（TST マーク付き）。</p>`}`;
@@ -91,12 +96,13 @@ export function renderPractice() {
   ctx.view().querySelectorAll("[data-lr]").forEach((li) => li.onclick = () => startRepeat(li.dataset.lr));
   ctx.view().querySelectorAll("[data-iv]").forEach((li) => li.onclick = () => startInterview(li.dataset.iv));
   $("#bs").onclick = startBuild;
+  $("#drill").onclick = startDrill;
 }
 
 function backBar(title) {
   return `<div class="qhead"><button class="linkbtn" id="back">← 戻る</button><span class="topic">${esc(title)}</span><span class="timer" id="timer"></span></div>`;
 }
-function bindBack() { $("#back").onclick = () => { speechSynthesis?.cancel?.(); rec.stop(); renderPractice(); window.scrollTo(0, 0); }; }
+function bindBack() { $("#back").onclick = () => { speechSynthesis?.cancel?.(); rec.stop(); stt.stop(); renderPractice(); window.scrollTo(0, 0); }; }
 
 // ---------------- テンプレート暗記 ----------------
 // [[ ]] で囲んだ部分が「型フレーズ」。印が無いもの（TST 原文など）は同じグループの型から自動で見つける
@@ -427,6 +433,90 @@ function checklistHtml(name, own) {
   return `<section class="panel"><h2>${tst ? esc(tst.title) : "自己チェック"}</h2>${items.map((x) => `<label class="check"><input type="checkbox"> ${esc(x)}</label>`).join("")}</section>`;
 }
 
+// ---------------- 文字起こし（ブラウザの音声認識） ----------------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const canTranscribe = () => !!SR;
+const stt = {
+  r: null, on: false, base: "", sess: "", interim: "", error: null,
+  start(onUpdate) {
+    if (!SR) return false;
+    this.stop(); this.base = ""; this.sess = ""; this.interim = ""; this.error = null;
+    const r = new SR();
+    r.lang = "en-US"; r.continuous = true; r.interimResults = true;
+    r.onresult = (e) => {
+      let fin = "", inter = "";
+      for (let i = 0; i < e.results.length; i++) { const t = e.results[i][0].transcript; if (e.results[i].isFinal) fin += t + " "; else inter += t; }
+      this.sess = fin; this.interim = inter; onUpdate?.(this.text());
+    };
+    r.onerror = (e) => { this.error = e.error; };
+    // 無音で止まるブラウザがあるので、止められるまで自動で再開する
+    r.onend = () => { this.base += this.sess; this.sess = ""; if (this.on) { try { r.start(); } catch { /* noop */ } } };
+    this.r = r; this.on = true;
+    try { r.start(); return true; } catch { this.on = false; return false; }
+  },
+  stop() { this.on = false; try { this.r?.stop(); } catch { /* noop */ } },
+  text() { return (this.base + this.sess + this.interim).replace(/\s+/g, " ").trim(); },
+};
+
+const TRANSITIONS = ["in addition", "furthermore", "on top of that", "what's more", "for example", "for instance", "to illustrate",
+  "in my view", "from my perspective", "i would argue", "it seems to me", "personally", "in fact", "above all", "especially",
+  "what i mean is", "as a result", "therefore", "because of this", "that's why", "however", "on the other hand", "even so",
+  "although", "first", "after that", "eventually", "in the end", "overall", "all in all", "in short", "to sum up",
+  "these days", "one reason is", "the reason is", "mainly because", "given this trend", "so overall"];
+const FILLERS = /\b(uh+|um+|uhm|erm?|ah+|hmm+|you know)\b/gi;
+const flat = (s) => " " + s.toLowerCase().replace(/[‘’]/g, "'").replace(/[^a-z0-9' ]+/g, " ").replace(/\s+/g, " ").trim() + " ";
+
+// 回答の文字起こしから、語数・話す速さ・言いよどみ・つなぎ言葉・型フレーズを数える
+function analyze(text, secs, framePhrases) {
+  const words = text.split(/\s+/).filter(Boolean);
+  const f = flat(text);
+  const used = TRANSITIONS.filter((t) => f.includes(" " + t + " "));
+  const fillers = (text.match(FILLERS) || []).length;
+  const keys = framePhrases.map((p) => ({ p, ok: f.includes(flat(p)) }));
+  return { n: words.length, wpm: secs > 0 ? Math.round(words.length / secs * 60) : 0, fillers, used, keys };
+}
+function statsHtml(a, text) {
+  const mark = (ok) => (ok ? '<span class="w-ok">✓</span>' : '<span class="w-ng">✕</span>');
+  return `<section class="panel"><h2>自動チェック</h2>
+    <div class="stats"><div><b>${a.n}</b><span>語（目安110〜）</span></div><div><b>${a.wpm}</b><span>語/分</span></div><div><b>${a.fillers}</b><span>言いよどみ</span></div></div>
+    <p class="small" style="margin:12px 0 4px">${mark(a.n >= 110)} 110語以上　${mark(a.used.length >= 2)} つなぎ言葉2つ以上　${mark(a.fillers < 3)} 言いよどみ3回未満</p>
+    <p class="small" style="margin:4px 0">つなぎ言葉：${a.used.length ? a.used.map(esc).join(", ") : "なし"}</p>
+    ${a.keys.length ? `<p class="small" style="margin:4px 0">型フレーズ：${a.keys.map((k) => `${mark(k.ok)} ${esc(k.p)}`).join("　")}</p>` : ""}
+    <details class="jabox"><summary>文字起こし全文</summary><p class="ex">${esc(text) || "（認識できませんでした）"}</p></details>
+    <p class="muted small" style="margin:6px 0 0">音声認識は「uh」「um」を省くことが多いので、言いよどみは録音でも確認してください。</p></section>`;
+}
+const framePhrasesFor = (i) => {
+  const t = data().templates.find((x) => x.id === `tp-int-q${i + 1}`);
+  return t ? [...t.text.matchAll(/\[\[(.+?)\]\]/g)].map((m) => m[1].replace(/[.,]$/, "")) : [];
+};
+
+// ---------------- 45秒の時間配分 ----------------
+const STAGES = [
+  [[0, 5, "答える", "Well, one thing that comes to mind is ..."], [5, 30, "具体例", "For example, ..."], [30, 45, "理由・まとめ", "I think I remember this so clearly because ..."]],
+  [[0, 5, "好みを言う", "Personally, I would rather ..."], [5, 15, "理由", "mainly because ..."], [15, 35, "個人的な例", "For instance, ..."], [35, 45, "まとめ", "That experience taught me that ..."]],
+  [[0, 5, "予想を言う", "Yes, I do think ..."], [5, 15, "理由", "One reason is that ..."], [15, 35, "最近の傾向", "These days, ..."], [35, 45, "まとめ", "Given this trend, it seems likely that ..."]],
+  [[0, 5, "賛否を言う", "I strongly agree that ..."], [5, 15, "理由", "The reason is that ..."], [15, 35, "例", "To illustrate, ..."], [35, 45, "まとめ", "So overall, I am convinced that ..."]],
+];
+const paceHtml = (i) => `<div class="pace" id="pace">${STAGES[i].map(([a, b, label], k) => `<div class="seg" data-k="${k}" style="flex:${b - a}"><span>${a}–${b}秒</span>${esc(label)}</div>`).join("")}</div>
+  <p class="pacehint" id="pacehint">${esc(STAGES[i][0][2])}：${esc(STAGES[i][0][3])}</p>`;
+function paceUpdate(i, elapsed) {
+  const k = Math.max(0, STAGES[i].findIndex(([a, b]) => elapsed >= a && elapsed < b));
+  const cur = elapsed >= 45 ? STAGES[i].length - 1 : k;
+  ctx.view().querySelectorAll("#pace .seg").forEach((el) => { const n = +el.dataset.k; el.classList.toggle("on", n === cur); el.classList.toggle("past", n < cur); });
+  const h = $("#pacehint"); if (h) h.textContent = `${STAGES[i][cur][2]}：${STAGES[i][cur][3]}`;
+}
+
+function sayThen(text, cb) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.95;
+    let done = false; const fin = () => { if (!done) { done = true; cb?.(); } };
+    u.onend = fin; u.onerror = fin;
+    speechSynthesis.speak(u);
+    setTimeout(fin, Math.max(4000, text.length * 90)); // onend が来ない端末への保険
+  } catch { cb?.(); }
+}
+
 // ---------------- Take an Interview ----------------
 function startInterview(id) {
   const set = data().interview.find((x) => x.id === id);
@@ -437,43 +527,66 @@ function startInterview(id) {
     clearTimer();
     if (run.i < 0) {
       ctx.view().innerHTML = `${backBar(set.topic)}<section class="panel"><p style="margin:0">${esc(set.intro)}</p>${set.introJa ? `<p class="ja">${esc(set.introJa)}</p>` : ""}</section>
-        <p class="muted small">質問は4つ。各質問のあと準備時間なしで45秒話します。質問文は聞くまで隠れています。</p>
+        <p class="muted small">質問は4つ。各質問のあと準備時間なしで45秒話します。回答中は「今どこを話すか」の目安が表示され、終わると文字起こしから語数やつなぎ言葉を自動でチェックします。</p>
         <button class="btn" id="go">始める</button>`;
       bindBack(); $("#go").onclick = () => { run.i = 0; show(); };
       ctx.speak(set.intro);
       return;
     }
-    const q = set.questions[run.i];
+    const i = run.i, q = set.questions[i];
     const types = ["個人の経験", "好み", "未来の予想", "抽象的な考え"];
-    ctx.view().innerHTML = `${backBar(`Q${run.i + 1} / 4 ・ ${types[run.i]}`)}
+    ctx.view().innerHTML = `${backBar(`Q${i + 1} / 4 ・ ${types[i]}`)}
       <section class="panel center">
         <button class="btn sub" id="play">▶ 質問を聞く</button>
-        <details style="margin-top:10px"><summary class="muted small">質問文を見る</summary><p class="ex">${esc(q)}</p>${set.questionsJa?.[run.i] ? `<p class="ja">${esc(set.questionsJa[run.i])}</p>` : ""}</details>
+        <details style="margin-top:10px"><summary class="muted small">質問文を見る</summary><p class="ex">${esc(q)}</p>${set.questionsJa?.[i] ? `<p class="ja">${esc(set.questionsJa[i])}</p>` : ""}</details>
         <div class="bigtimer" id="count">45</div>
-        ${canRecord() ? `<button class="btn" id="speak">● 回答開始（録音）</button>` : `<button class="btn" id="speak">回答開始（45秒）</button>`}
+        ${paceHtml(i)}
+        <button class="btn" id="speak">● 回答開始</button>
+        ${canTranscribe() ? `<label class="small muted"><input type="checkbox" id="usestt" checked> 文字起こしして自動チェック</label>` : `<p class="muted small">この端末のブラウザは音声認識に対応していないため、自動チェックは使えません。</p>`}
+        <p class="ex live" id="live"></p>
         <audio id="aud" controls hidden></audio>
       </section>
-      <div id="ref"></div>
-      <div class="toolbar"><button class="btn sub" id="tpl">型・模範解答</button><button class="btn" id="next">${run.i < 3 ? "次の質問へ" : "振り返りへ"}</button></div>`;
+      <div id="result"></div><div id="ref"></div>
+      <div class="toolbar"><button class="btn sub" id="tpl">型・模範解答</button><button class="btn" id="next">${i < 3 ? "次の質問へ" : "振り返りへ"}</button></div>`;
     bindBack();
     $("#play").onclick = () => ctx.speak(q);
     ctx.speak(q);
-    let running = false;
-    const stopAnswer = () => { clearTimer(); rec.stop(); running = false; $("#speak").textContent = canRecord() ? "● 録り直す" : "もう一度（45秒）"; };
+    let running = false, t0 = 0, usingStt = false;
+    const stopAnswer = () => {
+      if (!running) return;
+      clearTimer(); rec.stop(); running = false;
+      const secs = Math.min(45, (Date.now() - t0) / 1000);
+      $("#speak").textContent = "● 録り直す";
+      if (usingStt) {
+        stt.stop();
+        setTimeout(() => { // 最後の認識結果が届くのを少し待つ
+          const text = stt.text();
+          $("#live").textContent = "";
+          $("#result").innerHTML = stt.error && !text ? `<p class="muted small">音声認識が使えませんでした（${esc(stt.error)}）。録音で確認してください。</p>` : statsHtml(analyze(text, secs, framePhrasesFor(i)), text);
+        }, 700);
+      }
+    };
     $("#speak").onclick = async () => {
       if (running) return stopAnswer();
       speechSynthesis?.cancel?.();
+      $("#result").innerHTML = ""; $("#live").textContent = "";
       let left = 45; $("#count").textContent = left; $("#count").classList.remove("over");
       if (canRecord()) await rec.start((url) => { const a = $("#aud"); if (a) { a.src = url; a.hidden = false; } });
-      running = true; $("#speak").textContent = "■ 止める";
-      timer = setInterval(() => { left--; const c = $("#count"); if (!c) return clearTimer(); c.textContent = left; if (left <= 0) { c.classList.add("over"); stopAnswer(); } }, 1000);
+      usingStt = !!$("#usestt")?.checked && stt.start((txt) => { const l = $("#live"); if (l) l.textContent = txt; });
+      running = true; t0 = Date.now(); $("#speak").textContent = "■ 止める";
+      paceUpdate(i, 0);
+      timer = setInterval(() => {
+        left--; const c = $("#count"); if (!c) return clearTimer();
+        c.textContent = Math.max(0, left); paceUpdate(i, 45 - left);
+        if (left <= 0) { c.classList.add("over"); stopAnswer(); }
+      }, 1000);
     };
     $("#tpl").onclick = () => {
       const sample = D.templates.find((t) => t.note && norm(t.note) === norm(q));
       const box = (t) => `<section class="panel"><h2>${esc(t.title)}${badge(t)}</h2><p class="pre">${esc(plain(t.text))}</p>${t.ja ? `<details class="jabox"><summary>和訳</summary><p class="ja pre">${esc(t.ja)}</p></details>` : ""}</section>`;
-      $("#ref").innerHTML = (tplFor(run.i).map(box).join("") || `<p class="muted">型が見つかりません</p>`) + (sample ? box({ ...sample, title: `この質問の${sample.title}` }) : "");
+      $("#ref").innerHTML = (tplFor(i).map(box).join("") || `<p class="muted">型が見つかりません</p>`) + (sample ? box({ ...sample, title: `この質問の${sample.title}` }) : "");
     };
-    $("#next").onclick = () => { stopAnswer(); run.i++; if (run.i < 4) show(); else summary(); window.scrollTo(0, 0); };
+    $("#next").onclick = () => { stopAnswer(); stt.stop(); run.i++; if (run.i < 4) show(); else summary(); window.scrollTo(0, 0); };
   };
   const summary = () => {
     const P = prog(); P.iv[id] = (P.iv[id] || 0) + 1; ctx.save();
@@ -482,6 +595,70 @@ function startInterview(id) {
       ${checklistHtml("Take an Interview", OWN_CHECKS.interview)}
       <button class="btn" id="again">もう一度</button>`;
     bindBack(); $("#again").onclick = () => startInterview(id);
+  };
+  show();
+}
+
+// ---------------- 最初の一文ドリル ----------------
+// 質問を聞いて5秒以内に、型を使った最初の一文を言う。質問タイプ別の書き出しが口から出るまで繰り返す
+const OPENERS = [
+  { frame: "Well, one thing that comes to mind is ...", test: ["one thing that comes to mind", "comes to mind"] },
+  { frame: "Personally, I would rather ...", test: ["i would rather", "personally i", "i'd rather", "i prefer"] },
+  { frame: "Yes, I do think ... / No, I don't think ...", test: ["i do think", "i don't think", "i think"] },
+  { frame: "I strongly agree that ... / I don't really believe that ...", test: ["i strongly agree", "i agree", "i don't really believe", "i disagree"] },
+];
+function startDrill() {
+  const D = data();
+  const pool = D.interview.flatMap((s) => s.questions.map((q, i) => ({ q, i, ja: s.questionsJa?.[i], topic: s.topic })));
+  const list = shuffle(pool).slice(0, 10);
+  const run = { k: 0, ok: 0 };
+  const types = ["Q1 個人の経験", "Q2 好み", "Q3 未来の予想", "Q4 抽象的な考え"];
+  const show = () => {
+    clearTimer(); stt.stop();
+    const it = list[run.k];
+    ctx.view().innerHTML = `${backBar(`最初の一文ドリル ${run.k + 1} / ${list.length}`)}
+      <section class="panel center">
+        <p class="topic" style="margin:0">${esc(types[it.i])}</p>
+        <div class="bigtimer" id="count">…</div>
+        <p class="muted small" id="state">質問を読み上げています。終わったら5秒以内に最初の一文を言いましょう。</p>
+        <p class="ex live" id="live"></p>
+      </section>
+      <div id="res"></div>`;
+    bindBack();
+    let heard = "";
+    sayThen(it.q, () => {
+      if (!$("#count")) return;
+      let left = 5; $("#count").textContent = left; $("#state").textContent = "話して！";
+      if (canTranscribe()) stt.start((t) => { heard = t; const l = $("#live"); if (l) l.textContent = t; });
+      timer = setInterval(() => {
+        left--; const c = $("#count"); if (!c) return clearTimer();
+        c.textContent = Math.max(0, left);
+        if (left <= -2) { clearTimer(); stt.stop(); setTimeout(() => reveal(stt.text() || heard), 500); } // 5秒＋言い終わりの余裕2秒
+        else if (left <= 0) { c.classList.add("over"); $("#state").textContent = "言い終えてください"; }
+      }, 1000);
+    });
+    const reveal = (text) => {
+      const op = OPENERS[it.i];
+      const f = flat(text);
+      const auto = text ? op.test.some((p) => f.includes(" " + p + " ") || f.includes(" " + p)) : null;
+      const sample = D.templates.find((t) => t.note && norm(t.note) === norm(it.q));
+      const sampleFirst = sample ? plain(sample.text).split(/(?<=[.?!])\s/)[0] : "";
+      $("#state").textContent = "";
+      $("#res").innerHTML = `<section class="panel">
+          <p class="ex" style="margin-top:0">${esc(it.q)}</p>${it.ja ? `<p class="ja">${esc(it.ja)}</p>` : ""}
+          <h2 style="margin-top:12px">このタイプの書き出し</h2><p class="ex key-line">${esc(op.frame)}</p>
+          ${sampleFirst ? `<p class="small muted">模範解答の書き出し：${esc(sampleFirst)}</p>` : ""}
+          ${text ? `<p class="small">あなた：${esc(text)} ${auto ? '<span class="w-ok">型を使えています</span>' : '<span class="w-ng">型の書き出しが聞き取れませんでした</span>'}</p>` : ""}
+        </section>
+        <div class="toolbar"><button class="btn sub" id="ng">言えなかった</button><button class="btn" id="ok">言えた</button></div>`;
+      const next = (good) => { if (good) run.ok++; run.k++; if (run.k < list.length) show(); else summary(); };
+      $("#ok").onclick = () => next(true); $("#ng").onclick = () => next(false);
+    };
+  };
+  const summary = () => {
+    const P = prog(); P.drill = { runs: (P.drill?.runs || 0) + 1, best: Math.max(P.drill?.best || 0, run.ok) }; ctx.save();
+    ctx.view().innerHTML = `${backBar("最初の一文ドリル")}<section class="panel"><h2>結果</h2><div class="stats"><div><b>${run.ok}/${list.length}</b><span>5秒以内に言えた</span></div><div><b>${P.drill.best}</b><span>自己ベスト</span></div><div><b>${P.drill.runs}</b><span>回目</span></div></div></section><button class="btn" id="again">もう一度</button>`;
+    bindBack(); $("#again").onclick = startDrill;
   };
   show();
 }

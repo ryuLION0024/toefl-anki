@@ -169,3 +169,12 @@ details.jabox { margin: 0 0 14px; }
 details.jabox summary { font-size: 13px; color: var(--accent); cursor: pointer; padding: 4px 0; }
 details.jabox .ja { margin-top: 6px; }
 p.ja.pre { white-space: pre-wrap; }
+.pace { display: flex; gap: 3px; margin: 6px 0 4px; }
+.pace .seg { background: var(--line); color: var(--muted); border-radius: 6px; padding: 4px 2px; font-size: 11px; line-height: 1.3; text-align: center; }
+.pace .seg span { display: block; font-size: 10px; opacity: .8; }
+.pace .seg.past { background: var(--accent-soft); color: var(--accent); }
+.pace .seg.on { background: var(--accent); color: var(--surface); font-weight: 700; }
+.pacehint { font-size: 14px; color: var(--accent); margin: 4px 0 12px; min-height: 1.4em; }
+.live { min-height: 1.5em; color: var(--muted); font-size: 14px; }
+.key-line { color: var(--accent); }
+.pace .seg { min-width: 4.2em; }
